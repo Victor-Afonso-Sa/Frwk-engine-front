@@ -1,0 +1,88 @@
+<form #formulario="ngForm" (submit)="save(formulario)">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Nova variável</h4>
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="hide()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" *ngIf="objeto">
+    <div class="form-row">
+      <div class="form-group col-md-12 mt-3">
+        <label class="control-label" for="nomeVariavel"
+          >Nome da variável:
+        </label>
+        <input
+          pattern="[^0-9][a-zA-Z0-9]*"
+          class="form-control"
+          autocomplete="off"
+          required
+          type="text"
+          id="nomeVariavel"
+          name="nome"
+          [ngModel]="objeto['nome']"
+          (ngModelChange)="verificarNome(formulario)"
+        />
+        <div
+          class="alert alert-danger"
+          *ngIf="formulario?.controls?.nome?.errors?.exist"
+        >
+          Essa variavel ja existe no escopo.
+        </div>
+        <div
+          #validation
+          class="alert alert-danger"
+          *ngIf="
+            formulario?.controls?.nome?.errors?.pattern &&
+            !formulario?.controls?.nome?.pristine
+          "
+        >
+          Nome deve iniciar com letras, conter apenas letras e/ou números.
+        </div>
+      </div>
+    </div>
+    <app-tipos
+    name="type"
+    [(objeto)]="objeto"
+    [formulario]="formulario"
+    [(pastas)]="pastas"
+    (setArrayEmitter)="setArray($event)"
+    (setModeloEmitter)="select($event)"
+    (setTypeEmitter)="reset(formulario,$event)"
+  ></app-tipos>
+    <div class="form-row">
+      <div class="form-group col-md-12 mt-3" *ngIf="objeto['type']">
+        <expressao
+          name="valor"
+          [formulario]="formulario"
+          [(model)]="model"
+          [(objeto)]="objeto"
+          [(edit)]="edit"
+          [(variaveis)]="variaveis"
+          (jsonEmitter)="getJsonError($event)"
+        ></expressao>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center">
+      <button
+        class="btn btn-outline-success mx-2"
+        [disabled]="!(formulario.valid && jsonError)"
+        type="submit"
+      >
+        {{ "Salvar" }}
+      </button>
+      <button
+        class="btn btn-outline-danger mx-2"
+        *ngIf="edit"
+        (click)="excluirVar()"
+        type="button"
+      >
+        {{ "Excluir" }}
+      </button>
+    </div>
+  </div>
+</form>

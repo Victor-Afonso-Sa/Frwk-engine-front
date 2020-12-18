@@ -1,0 +1,25 @@
+<h4 class="">Variaveis:</h4>
+  <div *ngIf="varControler?.errors.length > 0">
+     <li  class="alert alert-danger text-center"  *ngFor="let item of varControler.errors">
+      {{'A variável '+ item['atualizacao'] +' está desatualizada' }}
+    </li>
+  </div>
+  <div id="variaveis" class="container-fluid row justify-content-start">
+    <button
+      class="btn btn-outline-success my-1 btn-size size-medium"
+      type="button"
+      (click)="newVar()"
+    >
+      <span class="material-icons"> add </span>
+    </button>
+    <ng-container *ngIf="objetoLocal['variaveisLocal']" >
+      <button
+      class="btn btn-outline-info mx-2 my-1 size-medium btn-size"
+      type="button"
+      *ngFor="let item of objetoLocal['variaveisLocal']"
+      (click)="editVar(item)"
+    >
+      {{ item.nome }}
+    </button>
+    </ng-container>
+  </div>

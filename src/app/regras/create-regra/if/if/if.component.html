@@ -1,0 +1,60 @@
+<div class="escopo my-4 p-1" id="escopo{{ id }}">
+  <div class="d-flex justify-content-center">
+    <span class="material-icons seta"
+    tooltip="Mover para cima"
+    placement="auto"
+    [delay]="200"
+    container="body"
+    (click)="moverAcima()"
+    >
+      north
+      </span>
+  </div>
+  <div class="row">
+    <div class="col-10">
+      <h4 class="col-10" *ngIf="!edicaoNome"  (dblclick)="editNome()">{{ objetoLocal['nome'] }}</h4>
+    <div *ngIf="edicaoNome" >
+      <input autofocus="true" autocomplete="off" [placeholder]="objetoLocal['nome']" (blur)="setNome()" class="ml-2 form-control col-2" type="text" [(ngModel)]="str" name="nome" id="nome" >
+    </div>
+    </div>
+    <div class="col-2">
+      <button
+        type="button"
+        class="btn btn-danger float-right"
+        (click)="removeRegra(id)"
+      >
+        Remove
+      </button>
+    </div>
+  </div>
+    <div class="d-flex flex-column"  id="combose{{id}}"></div>
+    <div id="combosenaose{{id}}"></div>
+    <button
+      type="button"
+      class="btn btn-outline-warning mr-5 my-2"
+      (click)="createEscopo('senaose')"
+    >
+      SE NÃO SE
+    </button>
+    <div id="combosenao{{id}}">
+      <button
+      type="button"
+      class="btn btn-outline-danger mr-5 mt-2"
+      *ngIf="hide"
+      (click)="createEscopo('senao');destroy()"
+    >
+      SE NÃO
+    </button>
+    </div>
+    <div class="d-flex justify-content-center">
+      <span class="material-icons seta mt-3"
+      tooltip="Mover para baixo"
+      placement="auto"
+      [delay]="200"
+      container="body"
+      (click)="moverAbaixo()"
+      >
+        south
+        </span>
+    </div>
+  </div>

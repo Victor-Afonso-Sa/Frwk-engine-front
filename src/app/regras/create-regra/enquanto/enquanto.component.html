@@ -1,0 +1,50 @@
+<div class="escopo my-4 p-2" id="escopo{{ id }}">
+  <div class="d-flex justify-content-center">
+    <span class="material-icons seta"
+    tooltip="Mover para cima"
+    placement="auto"
+    [delay]="200"
+    container="body"
+    (click)="moverAcima()"
+    >
+      north
+      </span>
+  </div>
+  <div class="row">
+    <div class="col-10 d-flex">
+      <h3 class="">{{ 'Enquanto ' }}</h3>
+      <ng-container *ngIf="tipo != 'senao'">
+      <h3 class="" >{{ ' (' }}</h3>
+      <button class="btn btn-outline-dark mx-3" (click)="openModalExpressao()">{{ objetoLocal['acao'] && objetoLocal['acao'].expressao ? objetoLocal['acao'].expressao : 'Expressão' }}</button>
+      <h3 class="" >{{ ")" }}</h3>
+    </ng-container>
+    </div>
+    <div class="col-2">
+      <button
+        type="button"
+        class="btn btn-danger float-right"
+        (click)="removeRegra(id)"
+      >
+        Remove
+      </button>
+    </div>
+  </div>
+  <app-create-variavel [(objetoLocal)]="objetoLocal"></app-create-variavel>
+  <div class="mt-3" id="{{ id }}">
+    {{ objeto | json }}<br />
+  </div>
+  <button type="button" class="btn btn-dark mr-5" (click)="novoEscopo()">
+    <span class="material-icons my-1"> add </span>
+  </button>
+  <div class="d-flex justify-content-center">
+    <span class="material-icons seta mt-3"
+    tooltip="Mover para baixo"
+    placement="auto"
+    [delay]="200"
+    container="body"
+    (click)="moverAbaixo()"
+    >
+      south
+      </span>
+  </div>
+</div>

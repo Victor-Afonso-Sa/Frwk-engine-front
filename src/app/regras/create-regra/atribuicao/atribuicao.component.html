@@ -1,0 +1,48 @@
+<div class="escopo my-4 p-2" id="escopo{{ id }}">
+  <div class="d-flex justify-content-center">
+    <span class="material-icons seta"
+    tooltip="Mover para cima"
+    placement="auto"
+    [delay]="200"
+    container="body"
+    (click)="moverAcima()"
+    >
+      north
+      </span>
+  </div>
+ <div class="row mt-3">
+  <div class="d-flex col-10">
+    <h3 class="">Atribuir:</h3>
+    <button  type="button" class="btn btn-outline-dark mx-3" (click)="openModalVariaveis()">
+      {{ setLabel() +' '}}
+    </button>
+    <h3 class="font-weight-bolder">=</h3>
+    <button *ngIf="objetoLocal['acao']" type="button" class="btn btn-outline-dark mx-3" [disabled]="objetoLocal['acao']['variavel'] ? false : true" (click)="openModalExpressao()">
+    {{ this.objetoLocal['acao']['valor'] ? this.objetoLocal['acao']['valor'] : 'Expressão' }}
+    </button>
+  </div>
+    <div class="col-2">
+      <button
+        type="button"
+        class="btn btn-danger float-right"
+        (click)="removeRegra(id)"
+      >
+        Remove
+      </button>
+    </div>
+  </div>
+  <span class="material-icons {{ errorControl ? 'color-red'  : 'color-green' }}">
+    {{ errorControl ? 'clear' : 'done' }}
+    </span>
+    <div class="d-flex justify-content-center">
+      <span class="material-icons seta mt-3"
+      tooltip="Mover para baixo"
+      placement="auto"
+      [delay]="200"
+      container="body"
+      (click)="moverAbaixo()"
+      >
+        south
+        </span>
+    </div>
+</div>

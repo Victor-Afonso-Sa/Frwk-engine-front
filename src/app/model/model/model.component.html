@@ -1,0 +1,54 @@
+<div class="side-bar">
+  <div class="row">
+    <div class="d-flex align-items-end flex-column">
+      <button
+        tooltip="Clique para criar uma nova pasta"
+        placement="top"
+        [delay]="200"
+        container="body"
+        class="btn btn btn-outline-success mx-auto mt-100"
+        (click)="createPasta()"
+      >
+        <span class="material-icons my-1"> add </span>
+      </button>
+      <h3 class="mt-3 mx-auto">Modelos:</h3>
+      <div *ngIf="pastas" >
+      <accordion
+        class="mt-3 acc-100"
+        [isAnimated]="true"
+        *ngFor="let pasta of pastas">
+        <accordion-group  [class]="''">
+          <div class="btn btn-block row" accordion-heading type="button">
+            <span class="material-icons float-left color-red"  (click)="dropPasta(pasta)">
+              clear
+              </span>
+            <div class="text-center" (dblclick)="editPasta(pasta,pastas)">{{ pasta.schemapastas.nomePasta }}</div>
+          </div>
+          <ul class="mx-auto">
+            <li  *ngFor="let model of pasta.schemapastas.models; index as j"
+
+            (click)="editModel(pasta, j)" >
+              {{  model.nomeModel }}
+            </li>
+            <li>
+              <span
+                class="material-icons color-green mais"
+                tooltip="Adicionar modelos"
+                placement="top"
+                [delay]="200"
+                container="body"
+                (click)="createModel(pasta)"
+              >
+                add
+              </span>
+            </li>
+          </ul>
+        </accordion-group>
+      </accordion>
+    </div>
+    </div>
+  </div>
+</div>
+
+
+

@@ -1,0 +1,28 @@
+<div class="escopo my-1 p-2 {{ tipo }}" id="escopo{{ id }}" >
+  <div class="row">
+    <div class="col-10 d-flex">
+      <h3 class="mx-1">{{ title() + ' ' }}</h3>
+      <ng-container *ngIf="tipo != 'senao'">
+      <h3 class="mx-1" >{{ ' (' }}</h3>
+      <button class="btn btn-outline-dark mx-3" (click)="openModalExpressao()">{{ objetoLocal['acao'] && objetoLocal['acao'].expressao ? objetoLocal['acao'].expressao : 'Expressão' }}</button>
+      <h3 class="mx-1" >{{ ")" }}</h3>
+    </ng-container>
+    </div>
+    <div class="col-2" *ngIf="tipo != 'se'" >
+      <button
+        type="button"
+        class="btn btn-danger float-right"
+        (click)="removeRegra(id)"
+      >
+        Remove
+      </button>
+    </div>
+  </div>
+  <app-create-variavel [(objetoLocal)]="objetoLocal"></app-create-variavel>
+  <div class="mt-3" id="{{ id }}">
+  </div>
+  <button type="button" class="btn btn-dark mr-5" (click)="novoEscopo()">
+    <span class="material-icons my-1"> add </span>
+  </button>
+</div>
+

@@ -1,0 +1,67 @@
+<div class="escopo my-4 p-2" id="escopo{{ id }}">
+  <div class="d-flex justify-content-center">
+    <span class="material-icons seta"
+    tooltip="Mover para cima"
+    placement="auto"
+    [delay]="200"
+    container="body"
+    (click)="moverAcima()"
+    >
+      north
+      </span>
+  </div>
+  <div class="row mt-3">
+    <div class="d-flex col-10">
+      <h3 class="">Executar regra:</h3>
+      <button
+        type="button"
+        class="btn btn-outline-dark mx-3"
+        (click)="openRegras()"
+      >
+        {{ objetoLocal['acao'] && objetoLocal['acao'].regra ?  objetoLocal['acao'].regra.idregra : "Escolha a regra"}}
+      </button>
+    </div>
+    <div class="col-2">
+      <button
+        type="button"
+        class="btn btn-danger float-right"
+        (click)="removeRegra(id)"
+      >
+        Remove
+      </button>
+    </div>
+    <div *ngIf="objetoLocal['acao'] && objetoLocal['acao'].regra" >
+      <div class="d-flex col-12 mt-3" id="entrada">
+        <h3> {{ "Entrada ( "+ (this.objetoLocal['acao'].regra.entrada.type == 'modelo' ? this.objetoLocal['acao'].regra.entrada.tipomodelo : this.objetoLocal['acao'].regra.entrada.type) +" )" }} =</h3>
+        <button
+          type="button"
+          class="btn btn-outline-dark mx-3 col"
+          (click)="openExpressao()"
+        >
+          {{  objetoLocal['acao'] && objetoLocal['acao'].entrada ?  objetoLocal['acao'].entrada : "Expressao de entrada" }}
+        </button>
+      </div>
+      <div class="d-flex col-12 mt-3" id="retorno">
+        <h3>{{ "Atribuir retorno ( "+ (this.objetoLocal['acao'].regra.saida.type == 'modelo' ? this.objetoLocal['acao'].regra.saida.tipomodelo : this.objetoLocal['acao'].regra.saida.type) +" )"}} a</h3>
+        <button
+          type="button"
+          class="btn btn-outline-dark mx-3"
+          (click)="openVariaveis()"
+        >
+          {{ objetoLocal['acao'] && objetoLocal['acao'].retorno ? objetoLocal['acao'].retorno  :"Selecionar variavel" }}
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center">
+    <span class="material-icons seta mt-3"
+    tooltip="Mover para baixo"
+    placement="auto"
+    [delay]="200"
+    container="body"
+    (click)="moverAbaixo()"
+    >
+      south
+      </span>
+  </div>
+</div>

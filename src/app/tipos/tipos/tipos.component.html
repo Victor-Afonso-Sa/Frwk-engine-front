@@ -1,0 +1,63 @@
+<div class="form-row">
+  <div class="form-group col-md-12 mt-1">
+    <label class="control-label" for="type"
+      >Selecione o tipo da variável:
+    </label>
+    <select
+      required
+      class="custom-select"
+      [(ngModel)]="objeto['type']"
+      (ngModelChange)="setType(objeto['type'])"
+      #type="ngModel"
+      id="type"
+      name="type"
+    >
+      <option *ngFor="let item of tiposVar" [value]="item.tipo">
+        {{ item.label }}
+      </option>
+      <option value="array">{{ "Lista" }}</option>
+    </select>
+  </div>
+</div>
+<div class="form-row" *ngIf="objeto['type']">
+  <div class="form-group col-md-12 group mt-3" *ngIf="type.value == 'array'">
+    <label class="control-label" for="modelo">Tipo de dados da lista: </label>
+    <select
+      required
+      class="custom-select"
+      [(ngModel)]="objeto['tipoitems']"
+      (ngModelChange)="setArray(objeto['tipoitems'])"
+      id="tipoitems"
+      name="tipoitems"
+    >
+      <option *ngFor="let item of tiposVar" [value]="item.tipo">
+        {{ item.label }}
+      </option>
+    </select>
+  </div>
+  <div
+    class="form-group col-md-12 group mt-3"
+    *ngIf="
+      (type.value == 'modelo' || objeto['tipoitems'] == 'modelo') && pastas
+    "
+  >
+    <label class="control-label" for="modelo">Modelos: </label>
+    <select
+      required
+      class="custom-select"
+      [(ngModel)]="objeto['tipomodelo']"
+      (ngModelChange)="setModelo(objeto['tipomodelo'])"
+      id="tipomodelo"
+      name="tipomodelo"
+    >
+      <ng-container *ngFor="let item of pastas">
+        <option
+          *ngFor="let modelo of item.schemapastas.models"
+          [value]="item.idpasta + '.' + modelo.idModel"
+        >
+          {{ item.idpasta + "." + modelo.idModel }}
+        </option>
+      </ng-container>
+    </select>
+  </div>
+</div>

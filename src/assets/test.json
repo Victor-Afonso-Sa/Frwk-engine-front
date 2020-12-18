@@ -1,0 +1,755 @@
+{
+  "nome": "Regra",
+  "tipo": "regra",
+  "entrada": {
+    "nome": "entrada",
+    "type": "array",
+    "tipoitems": "modelo",
+    "tipomodelo": "modelos.movimentacao",
+    "modelo": {
+      "type": "object",
+      "properties": {
+        "tipo": { "type": "string" },
+        "valor": { "type": "integer" }
+      }
+    }
+  },
+  "saida": {
+    "nome": "saida",
+    "type": "modelo",
+    "tipomodelo": "modelos.teste",
+    "modelo": {
+      "type": "object",
+      "properties": {
+        "status": { "type": "string" },
+        "valor": { "type": "integer" }
+      }
+    },
+    "valor": {}
+  },
+  "variaveisLocal": [{ "type": "integer", "valor": "0", "nome": "total" }],
+  "variaveis": [
+    {
+      "nome": "entrada",
+      "type": "array",
+      "tipoitems": "modelo",
+      "tipomodelo": "modelos.movimentacao",
+      "modelo": {
+        "type": "object",
+        "properties": {
+          "tipo": { "type": "string" },
+          "valor": { "type": "integer" }
+        }
+      }
+    },
+    {
+      "nome": "saida",
+      "type": "modelo",
+      "tipomodelo": "modelos.teste",
+      "modelo": {
+        "type": "object",
+        "properties": {
+          "status": { "type": "string" },
+          "valor": { "type": "integer" }
+        }
+      },
+      "valor": {}
+    },
+    { "type": "integer", "valor": "0", "nome": "total" }
+  ],
+  "itens": [
+    {
+      "nome": "iteracao1",
+      "id": 1,
+      "tipo": "iteracao",
+      "variaveisLocal": [],
+      "variaveis": [
+        {
+          "nome": "entrada",
+          "type": "array",
+          "tipoitems": "modelo",
+          "tipomodelo": "modelos.movimentacao",
+          "modelo": {
+            "type": "object",
+            "properties": {
+              "tipo": { "type": "string" },
+              "valor": { "type": "integer" }
+            }
+          }
+        },
+        {
+          "nome": "saida",
+          "type": "modelo",
+          "tipomodelo": "modelos.teste",
+          "modelo": {
+            "type": "object",
+            "properties": {
+              "status": { "type": "string" },
+              "valor": { "type": "integer" }
+            }
+          },
+          "valor": {}
+        },
+        { "type": "integer", "valor": "0", "nome": "total" },
+        {
+          "nome": "item",
+          "type": "modelos.movimentacao",
+          "itemArray": true,
+          "modelo": {
+            "type": "object",
+            "properties": {
+              "tipo": { "type": "string" },
+              "valor": { "type": "integer" }
+            }
+          }
+        }
+      ],
+      "acao": {
+        "array": {
+          "id": "entrada",
+          "type": "array",
+          "tipoitems": "modelo",
+          "tipomodelo": "modelos.movimentacao",
+          "modelo": {
+            "type": "object",
+            "properties": {
+              "tipo": { "type": "string" },
+              "valor": { "type": "integer" }
+            }
+          },
+          "nome": "entrada : array"
+        },
+        "iterado": "item"
+      },
+      "itens": [
+        {
+          "nome": "if2",
+          "id": 2,
+          "tipo": "if",
+          "variaveisescopo": [
+            {
+              "nome": "entrada",
+              "type": "array",
+              "tipoitems": "modelo",
+              "tipomodelo": "modelos.movimentacao",
+              "modelo": {
+                "type": "object",
+                "properties": {
+                  "tipo": { "type": "string" },
+                  "valor": { "type": "integer" }
+                }
+              }
+            },
+            {
+              "nome": "saida",
+              "type": "modelo",
+              "tipomodelo": "modelos.teste",
+              "modelo": {
+                "type": "object",
+                "properties": {
+                  "status": { "type": "string" },
+                  "valor": { "type": "integer" }
+                }
+              },
+              "valor": {}
+            },
+            { "type": "integer", "valor": "0", "nome": "total" },
+            {
+              "nome": "item",
+              "type": "modelos.movimentacao",
+              "itemArray": true,
+              "modelo": {
+                "type": "object",
+                "properties": {
+                  "tipo": { "type": "string" },
+                  "valor": { "type": "integer" }
+                }
+              }
+            }
+          ],
+          "itens": [
+            {
+              "nome": "se3",
+              "id": 3,
+              "tipo": "se",
+              "variaveisLocal": [],
+              "variaveis": [
+                {
+                  "nome": "entrada",
+                  "type": "array",
+                  "tipoitems": "modelo",
+                  "tipomodelo": "modelos.movimentacao",
+                  "modelo": {
+                    "type": "object",
+                    "properties": {
+                      "tipo": { "type": "string" },
+                      "valor": { "type": "integer" }
+                    }
+                  }
+                },
+                {
+                  "nome": "saida",
+                  "type": "modelo",
+                  "tipomodelo": "modelos.teste",
+                  "modelo": {
+                    "type": "object",
+                    "properties": {
+                      "status": { "type": "string" },
+                      "valor": { "type": "integer" }
+                    }
+                  },
+                  "valor": {}
+                },
+                { "type": "integer", "valor": "0", "nome": "total" },
+                {
+                  "nome": "item",
+                  "type": "modelos.movimentacao",
+                  "itemArray": true,
+                  "modelo": {
+                    "type": "object",
+                    "properties": {
+                      "tipo": { "type": "string" },
+                      "valor": { "type": "integer" }
+                    }
+                  }
+                }
+              ],
+              "acao": { "expressao": "item.tipo == \"debito\"" },
+              "itens": [
+                {
+                  "nome": "atribuicao4",
+                  "id": 4,
+                  "tipo": "atribuicao",
+                  "variaveisLocal": [],
+                  "variaveis": [
+                    {
+                      "nome": "entrada",
+                      "type": "array",
+                      "tipoitems": "modelo",
+                      "tipomodelo": "modelos.movimentacao",
+                      "modelo": {
+                        "type": "object",
+                        "properties": {
+                          "tipo": { "type": "string" },
+                          "valor": { "type": "integer" }
+                        }
+                      }
+                    },
+                    {
+                      "nome": "saida",
+                      "type": "modelo",
+                      "tipomodelo": "modelos.teste",
+                      "modelo": {
+                        "type": "object",
+                        "properties": {
+                          "status": { "type": "string" },
+                          "valor": { "type": "integer" }
+                        }
+                      },
+                      "valor": {}
+                    },
+                    { "type": "integer", "valor": "0", "nome": "total" },
+                    {
+                      "nome": "item",
+                      "type": "modelos.movimentacao",
+                      "itemArray": true,
+                      "modelo": {
+                        "type": "object",
+                        "properties": {
+                          "tipo": { "type": "string" },
+                          "valor": { "type": "integer" }
+                        }
+                      }
+                    }
+                  ],
+                  "acao": {
+                    "variavel": {
+                      "id": "total",
+                      "type": "integer",
+                      "valor": "0",
+                      "nome": "total : integer"
+                    },
+                    "valor": "total - item.valor"
+                  },
+                  "itens": []
+                }
+              ]
+            },
+            {
+              "nome": "senaose5",
+              "id": 5,
+              "tipo": "senaose",
+              "variaveisLocal": [],
+              "variaveis": [
+                {
+                  "nome": "entrada",
+                  "type": "array",
+                  "tipoitems": "modelo",
+                  "tipomodelo": "modelos.movimentacao",
+                  "modelo": {
+                    "type": "object",
+                    "properties": {
+                      "tipo": { "type": "string" },
+                      "valor": { "type": "integer" }
+                    }
+                  }
+                },
+                {
+                  "nome": "saida",
+                  "type": "modelo",
+                  "tipomodelo": "modelos.teste",
+                  "modelo": {
+                    "type": "object",
+                    "properties": {
+                      "status": { "type": "string" },
+                      "valor": { "type": "integer" }
+                    }
+                  },
+                  "valor": {}
+                },
+                { "type": "integer", "valor": "0", "nome": "total" },
+                {
+                  "nome": "item",
+                  "type": "modelos.movimentacao",
+                  "itemArray": true,
+                  "modelo": {
+                    "type": "object",
+                    "properties": {
+                      "tipo": { "type": "string" },
+                      "valor": { "type": "integer" }
+                    }
+                  }
+                }
+              ],
+              "acao": { "expressao": "item.tipo == \"credito\"" },
+              "itens": [
+                {
+                  "nome": "atribuicao6",
+                  "id": 6,
+                  "tipo": "atribuicao",
+                  "variaveisLocal": [],
+                  "variaveis": [
+                    {
+                      "nome": "entrada",
+                      "type": "array",
+                      "tipoitems": "modelo",
+                      "tipomodelo": "modelos.movimentacao",
+                      "modelo": {
+                        "type": "object",
+                        "properties": {
+                          "tipo": { "type": "string" },
+                          "valor": { "type": "integer" }
+                        }
+                      }
+                    },
+                    {
+                      "nome": "saida",
+                      "type": "modelo",
+                      "tipomodelo": "modelos.teste",
+                      "modelo": {
+                        "type": "object",
+                        "properties": {
+                          "status": { "type": "string" },
+                          "valor": { "type": "integer" }
+                        }
+                      },
+                      "valor": {}
+                    },
+                    { "type": "integer", "valor": "0", "nome": "total" },
+                    {
+                      "nome": "item",
+                      "type": "modelos.movimentacao",
+                      "itemArray": true,
+                      "modelo": {
+                        "type": "object",
+                        "properties": {
+                          "tipo": { "type": "string" },
+                          "valor": { "type": "integer" }
+                        }
+                      }
+                    }
+                  ],
+                  "acao": {
+                    "variavel": {
+                      "id": "total",
+                      "type": "integer",
+                      "valor": "0",
+                      "nome": "total : integer"
+                    },
+                    "valor": "total + item.valor"
+                  },
+                  "itens": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nome": "atribuicao7",
+      "id": 7,
+      "tipo": "atribuicao",
+      "variaveisLocal": [],
+      "variaveis": [
+        {
+          "nome": "entrada",
+          "type": "array",
+          "tipoitems": "modelo",
+          "tipomodelo": "modelos.movimentacao",
+          "modelo": {
+            "type": "object",
+            "properties": {
+              "tipo": { "type": "string" },
+              "valor": { "type": "integer" }
+            }
+          }
+        },
+        {
+          "nome": "saida",
+          "type": "modelo",
+          "tipomodelo": "modelos.teste",
+          "modelo": {
+            "type": "object",
+            "properties": {
+              "status": { "type": "string" },
+              "valor": { "type": "integer" }
+            }
+          },
+          "valor": {}
+        },
+        { "type": "integer", "valor": "0", "nome": "total" }
+      ],
+      "acao": {
+        "variavel": {
+          "id": "saida.valor",
+          "nome": "saida.valor : integer",
+          "type": "integer"
+        },
+        "valor": "total"
+      },
+      "itens": []
+    },
+    {
+      "nome": "if8",
+      "id": 8,
+      "tipo": "if",
+      "variaveisescopo": [
+        {
+          "nome": "entrada",
+          "type": "array",
+          "tipoitems": "modelo",
+          "tipomodelo": "modelos.movimentacao",
+          "modelo": {
+            "type": "object",
+            "properties": {
+              "tipo": { "type": "string" },
+              "valor": { "type": "integer" }
+            }
+          }
+        },
+        {
+          "nome": "saida",
+          "type": "modelo",
+          "tipomodelo": "modelos.teste",
+          "modelo": {
+            "type": "object",
+            "properties": {
+              "status": { "type": "string" },
+              "valor": { "type": "integer" }
+            }
+          },
+          "valor": {}
+        },
+        { "type": "integer", "valor": "0", "nome": "total" }
+      ],
+      "itens": [
+        {
+          "nome": "se9",
+          "id": 9,
+          "tipo": "se",
+          "variaveisLocal": [],
+          "variaveis": [
+            {
+              "nome": "entrada",
+              "type": "array",
+              "tipoitems": "modelo",
+              "tipomodelo": "modelos.movimentacao",
+              "modelo": {
+                "type": "object",
+                "properties": {
+                  "tipo": { "type": "string" },
+                  "valor": { "type": "integer" }
+                }
+              }
+            },
+            {
+              "nome": "saida",
+              "type": "modelo",
+              "tipomodelo": "modelos.teste",
+              "modelo": {
+                "type": "object",
+                "properties": {
+                  "status": { "type": "string" },
+                  "valor": { "type": "integer" }
+                }
+              },
+              "valor": {}
+            },
+            { "type": "integer", "valor": "0", "nome": "total" }
+          ],
+          "acao": { "expressao": "total > 0" },
+          "itens": [
+            {
+              "nome": "atribuicao10",
+              "id": 10,
+              "tipo": "atribuicao",
+              "variaveisLocal": [],
+              "variaveis": [
+                {
+                  "nome": "entrada",
+                  "type": "array",
+                  "tipoitems": "modelo",
+                  "tipomodelo": "modelos.movimentacao",
+                  "modelo": {
+                    "type": "object",
+                    "properties": {
+                      "tipo": { "type": "string" },
+                      "valor": { "type": "integer" }
+                    }
+                  }
+                },
+                {
+                  "nome": "saida",
+                  "type": "modelo",
+                  "tipomodelo": "modelos.teste",
+                  "modelo": {
+                    "type": "object",
+                    "properties": {
+                      "status": { "type": "string" },
+                      "valor": { "type": "integer" }
+                    }
+                  },
+                  "valor": {}
+                },
+                { "type": "integer", "valor": "0", "nome": "total" }
+              ],
+              "acao": {
+                "variavel": {
+                  "id": "saida.status",
+                  "nome": "saida.status : string",
+                  "type": "string"
+                },
+                "valor": "\"Positivo\""
+              },
+              "itens": []
+            }
+          ]
+        },
+        {
+          "nome": "senaose11",
+          "id": 11,
+          "tipo": "senaose",
+          "variaveisLocal": [],
+          "variaveis": [
+            {
+              "nome": "entrada",
+              "type": "array",
+              "tipoitems": "modelo",
+              "tipomodelo": "modelos.movimentacao",
+              "modelo": {
+                "type": "object",
+                "properties": {
+                  "tipo": { "type": "string" },
+                  "valor": { "type": "integer" }
+                }
+              }
+            },
+            {
+              "nome": "saida",
+              "type": "modelo",
+              "tipomodelo": "modelos.teste",
+              "modelo": {
+                "type": "object",
+                "properties": {
+                  "status": { "type": "string" },
+                  "valor": { "type": "integer" }
+                }
+              },
+              "valor": {}
+            },
+            { "type": "integer", "valor": "0", "nome": "total" }
+          ],
+          "acao": { "expressao": "total < 0" },
+          "itens": [
+            {
+              "nome": "atribuicao12",
+              "id": 12,
+              "tipo": "atribuicao",
+              "variaveisLocal": [],
+              "variaveis": [
+                {
+                  "nome": "entrada",
+                  "type": "array",
+                  "tipoitems": "modelo",
+                  "tipomodelo": "modelos.movimentacao",
+                  "modelo": {
+                    "type": "object",
+                    "properties": {
+                      "tipo": { "type": "string" },
+                      "valor": { "type": "integer" }
+                    }
+                  }
+                },
+                {
+                  "nome": "saida",
+                  "type": "modelo",
+                  "tipomodelo": "modelos.teste",
+                  "modelo": {
+                    "type": "object",
+                    "properties": {
+                      "status": { "type": "string" },
+                      "valor": { "type": "integer" }
+                    }
+                  },
+                  "valor": {}
+                },
+                { "type": "integer", "valor": "0", "nome": "total" }
+              ],
+              "acao": {
+                "variavel": {
+                  "id": "saida.status",
+                  "nome": "saida.status : string",
+                  "type": "string"
+                },
+                "valor": "\"Negativo\""
+              },
+              "itens": []
+            }
+          ]
+        },
+        {
+          "nome": "senao13",
+          "id": 13,
+          "tipo": "senao",
+          "variaveisLocal": [],
+          "variaveis": [
+            {
+              "nome": "entrada",
+              "type": "array",
+              "tipoitems": "modelo",
+              "tipomodelo": "modelos.movimentacao",
+              "modelo": {
+                "type": "object",
+                "properties": {
+                  "tipo": { "type": "string" },
+                  "valor": { "type": "integer" }
+                }
+              }
+            },
+            {
+              "nome": "saida",
+              "type": "modelo",
+              "tipomodelo": "modelos.teste",
+              "modelo": {
+                "type": "object",
+                "properties": {
+                  "status": { "type": "string" },
+                  "valor": { "type": "integer" }
+                }
+              },
+              "valor": {}
+            },
+            { "type": "integer", "valor": "0", "nome": "total" }
+          ],
+          "acao": {},
+          "itens": [
+            {
+              "nome": "atribuicao14",
+              "id": 14,
+              "tipo": "atribuicao",
+              "variaveisLocal": [],
+              "variaveis": [
+                {
+                  "nome": "entrada",
+                  "type": "array",
+                  "tipoitems": "modelo",
+                  "tipomodelo": "modelos.movimentacao",
+                  "modelo": {
+                    "type": "object",
+                    "properties": {
+                      "tipo": { "type": "string" },
+                      "valor": { "type": "integer" }
+                    }
+                  }
+                },
+                {
+                  "nome": "saida",
+                  "type": "modelo",
+                  "tipomodelo": "modelos.teste",
+                  "modelo": {
+                    "type": "object",
+                    "properties": {
+                      "status": { "type": "string" },
+                      "valor": { "type": "integer" }
+                    }
+                  },
+                  "valor": {}
+                },
+                { "type": "integer", "valor": "0", "nome": "total" }
+              ],
+              "acao": {
+                "variavel": {
+                  "id": "saida.status",
+                  "nome": "saida.status : string",
+                  "type": "string"
+                },
+                "valor": "\"Zero\""
+              },
+              "itens": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "nome": "retorno15",
+      "id": 15,
+      "tipo": "retorno",
+      "variaveisLocal": [],
+      "variaveis": [
+        {
+          "nome": "entrada",
+          "type": "array",
+          "tipoitems": "modelo",
+          "tipomodelo": "modelos.movimentacao",
+          "modelo": {
+            "type": "object",
+            "properties": {
+              "tipo": { "type": "string" },
+              "valor": { "type": "integer" }
+            }
+          }
+        },
+        {
+          "nome": "saida",
+          "type": "modelo",
+          "tipomodelo": "modelos.teste",
+          "modelo": {
+            "type": "object",
+            "properties": {
+              "status": { "type": "string" },
+              "valor": { "type": "integer" }
+            }
+          },
+          "valor": {}
+        },
+        { "type": "integer", "valor": "0", "nome": "total" }
+      ],
+      "acao": {},
+      "itens": []
+    }
+  ]
+  ,
+  "idregra": "regra"
+}

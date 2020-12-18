@@ -1,0 +1,15 @@
+<div class="d-flex justify-content-center">
+  <h4 class="m-3">{{ "Regras:" }}</h4>
+</div>
+<div
+  class="d-flex justify-content-center mb-5"
+  *ngIf="regras &&  regras.length > 0; else elseTemplate"
+>
+    <tree-root [nodes]="regras" [options]="options"></tree-root>
+</div>
+<ng-template #elseTemplate>
+  <div class="alert alert-warning mx-auto text-center" role="alert">
+    {{ "Nenhuma variavel cadastrada!" }}
+  </div>
+</ng-template>
+

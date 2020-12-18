@@ -1,0 +1,25 @@
+<div *ngIf="objeto" >
+<label class="control-label" for="valorinicial">Valor: </label>
+<p>
+        <textarea
+          autosize
+          wrap="hard"
+          autocomplete="off"
+          class="form-control"
+          name="valor"
+          id="valor"
+          cols="40"
+          rows="2"
+          [formControl]="valor"
+          [(ngModel)]="objeto['valor']"
+        ></textarea>
+      </p>
+      <div class="border mt-2 ">
+      <tree-root  [nodes]="variaveis" [options]="options"></tree-root>
+      </div>
+        <div class="mt-3" *ngIf="verificado" >
+          <div *ngIf="!jsonError"  class="alert alert-danger mx-auto text-center text-uppercase">{{ msg }}</div>
+          <div *ngIf="jsonError"  class="alert alert-success mx-auto text-center text-uppercase">{{ msg }}</div>
+        </div>
+      </div>
+{{ objeto |json}}

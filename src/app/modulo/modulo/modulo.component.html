@@ -1,0 +1,99 @@
+<div class="container-fluid mt-5 pt-4">
+  <form
+    class="mt-5"
+    #formulario="ngForm"
+    (ngSubmit)="edicao ? onEdit(formulario) : on(formulario)"
+    (change)="setFormAux(formulario)"
+  >
+    <div class="form-row mt-5">
+      <div class="col-md-6 mx-auto">
+        <label class="control-label" for="Tipo">Nome: </label>
+        <input
+          autocomplete="off"
+          type="text"
+          class="form-control"
+          name="nomeModel"
+          id="nome"
+          [value]="modelValues['nomeModel'] ? modelValues['nomeModel'] : null"
+          [ngModel]="modelValues['nomeModel']"
+          required
+        />
+        <div *ngIf="!nomeError;else error"></div>
+      </div>
+      <div class="col-md-6" *ngIf="edicao">
+        <label class="control-label" for="Tipo">Identificador:</label>
+        <input
+          name="idModel"
+          tooltip="Identificador usado na chamada e não pode ser alterado"
+          placement="top"
+          [delay]="200"
+          container="body"
+          class="form-control text-center"
+          type="text"
+          [ngModel]="modelValues['idModel']"
+          readonly
+        />
+      </div>
+    </div>
+    <div class="form-row mt-3">
+      <div class="col-md-12">
+        <label class="control-label" for="cep">Json: </label>
+        <textarea
+          wrap="hard"
+          autocomplete="off"
+          class="form-control"
+          name="jsonModel"
+          id="json"
+          cols="40"
+          rows="5"
+          [ngModel]="modelValues['jsonModel']"
+          (ngModelChange)="jsonTest(formulario.value.jsonModel)"
+          required
+        ></textarea>
+        <div class="mt-3" *ngIf="verificado">
+          <div
+            *ngIf="!jsonError"
+            class="alert alert-danger mx-auto text-center text-uppercase"
+          >
+            {{ msg }}
+          </div>
+          <div
+            *ngIf="jsonError"
+            class="alert alert-success mx-auto text-center text-uppercase"
+          >
+            Json valido
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center">
+      <button
+        class="btn btn-outline-info px-4 mt-4 mx-2"
+        type="button"
+        (click)="resetForm(formulario)"
+      >
+        Cancelar
+      </button>
+      <button
+        *ngIf="edicao"
+        class="btn btn-outline-danger px-4 mt-4 mx-2"
+        type="button"
+        (click)="excluir(formulario)"
+      >
+        Excluir
+      </button>
+      <button
+        class="btn btn-outline-dark px-4 mt-4 mx-2"
+        type="submit"
+        [disabled]="!(formulario.valid && jsonError)"
+      >
+        Salvar
+      </button>
+    </div>
+  </form>
+</div>
+<ng-template class="d-flex justify-content-center" #error>
+  <div class="alert alert-danger">
+    Esse modelo ja existe
+  </div>
+</ng-template>

@@ -1,0 +1,16 @@
+<div class="d-flex justify-content-center">
+  <h4 class="m-3">Variaveis:</h4>
+</div>
+<div *ngIf="error" class="alert alert-warning text-center" >Tipo invalido (apenas {{ only }})</div>
+<div
+  class="d-flex justify-content-center mb-5"
+  *ngIf="variaveis &&  variaveis.length > 0; else elseTemplate"
+>
+    <tree-root [nodes]="variaveis" [options]="options"></tree-root>
+</div>
+<ng-template #elseTemplate>
+  <div class="alert alert-warning mx-auto text-center" role="alert">
+    Nenhuma variavel cadastrada!
+  </div>
+</ng-template>
+

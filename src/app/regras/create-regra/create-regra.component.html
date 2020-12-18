@@ -1,0 +1,18 @@
+<div class="container" *ngIf="objeto" >
+<div class="d-flex justify-content-center mt-custom">
+<h4 class="mb-1">{{ title }}</h4>
+</div>
+<app-create-variavel [(objetoLocal)]="objeto.schemaregras"></app-create-variavel>
+<div id="bodyRegra" >
+
+</div>
+<button class="btn btn-outline-dark " *ngIf="objeto" (click)="regra()">
+  <span class="material-icons my-1">
+  add
+  </span></button>
+<div class="d-flex justify-content-center m-3e33">
+  <button class="btn btn-outline-dark px-4 mx-5" (click)="voltar()">Sair</button>
+  <button class="btn btn-outline-success px-4 mx-5" *ngIf="objeto"  (click)="edit ? editar() : salvar()">{{ edit ? "Editar" :"Salvar"}}</button>
+</div>
+</div>
+

@@ -1,0 +1,36 @@
+<div class="escopo my-4 p-2 " id="escopo{{ id }}" >
+  <div class="d-flex justify-content-center">
+    <span class="material-icons seta"
+    tooltip="Mover para cima"
+    placement="auto"
+    [delay]="200"
+    container="body"
+    (click)="moverAcima()"
+    >
+      north
+      </span>
+  </div>
+  <div class="d-flex justify-content-between">
+    <h4 class="align-self-start align-middle text-center">{{'Retornar'}}</h4>
+    <div class="">
+      <button
+        type="button"
+        class="btn btn-danger align-self-end"
+        (click)="removeRegra(id)"
+      >
+        Remove
+      </button>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center">
+    <span class="material-icons seta mt-3"
+    tooltip="Mover para baixo"
+    placement="auto"
+    [delay]="200"
+    container="body"
+    (click)="moverAbaixo()"
+    >
+      south
+      </span>
+  </div>
+</div>
