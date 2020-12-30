@@ -32,19 +32,26 @@ export class RegrasSidebarComponent implements OnInit {
     private sharedService: SharedService,
     private confirmService: ConfirmService
   ) {}
+  classe = false;
   pastas = [];
   nomes = [];
   display = false;
   ngOnInit() {
     this.refresh();
-    this.service.atualizar.pipe(first()).subscribe((e) =>{
-      this.pastas.splice(
-        this.pastas.indexOf(this.pastas.find((p) => p.idpasta == e[`idpasta`])),
-        1,
-        e
-      );this.setNomes();},
-      ()=> {},
-      ()=>{this.display = true}
+    this.service.atualizar.pipe().subscribe(
+      (e) => {
+        this.pastas.splice(
+          this.pastas.indexOf(
+            this.pastas.find((p) => p.idpasta == e[`idpasta`])
+          ),
+          1,
+          e
+        );
+      },
+      () => {},
+      () => {
+        this.display = true;
+      }
     );
   }
   refresh() {
@@ -64,16 +71,19 @@ export class RegrasSidebarComponent implements OnInit {
       .subscribe(
         (pastas) => (this.pastas = pastas),
         () => {},
-        () => { this.setNomes(); this.display = true });
+        () => {
+          this.display = true;
+        }
+      );
   }
   createRegra(pasta) {
-    this.router.navigate([{ outlets: { dash: `form/${pasta.idpasta}` } }]);
+    this.router.navigate([{ outlets: { dash: `form/${pasta.idpasta}` } }],{skipLocationChange: true});
   }
   edit(pasta, item) {
     item = item.trim().replace(/ /g, '.').toLowerCase();
     this.router.navigate([
       { outlets: { dash: `form/${pasta.idpasta}/${item}` } },
-    ]);
+    ],{skipLocationChange: true});
   }
 
   createPasta() {
@@ -93,46 +103,45 @@ export class RegrasSidebarComponent implements OnInit {
       .pipe(
         first(),
         distinctUntilChanged(),
-        filter((v) => v),
+        filter((v) => v && v != false),
+        tap((v) => {
+          this.excluirRegras(pasta);
+          this.pastas.splice(this.pastas.indexOf(pasta), 1);
+        }),
         switchMap((v) => this.sharedService.deletePastaRegras(pasta.idpasta))
       )
       .pipe(take(1))
-      .subscribe(
-        (v) => {},
-        (error) => {},
-        () => {
-          this.excluirRegras(pasta);
-          this.pastas.splice(this.pastas.indexOf(pasta), 1);
-        }
-      );
+      .subscribe();
   }
-  excluirRegras(pasta){
-    if(pasta.regras.length > 0){
+  excluirRegras(pasta) {
+    if (pasta.regras.length > 0) {
       for (let index = 0; index < pasta.regras.length; index++) {
         const element = pasta.regras[index];
-        this.service.excluirRegra(element).subscribe();
+        this.service.excluirRegra(element.idregra).subscribe();
       }
     }
   }
   getNomeRegra(id) {
-    return this.nomes.find(
-      regra => regra.id == id
-    )
+    return this.nomes.find((regra) => regra.id == id);
   }
-  setNomes(){
-      for (let index = 0; index < this.pastas.length; index++) {
-        const element = this.pastas[index].regras;
-        for (let index = 0; index < element.length; index++) {
-          const regra = element[index];
-          this.service
-            .getOneRegra(regra)
-            .pipe(
-              map(
-                (r) => (r[`schemaregras`] = JSON.parse(r[`schemaregras`]))
-              )
-            )
-            .subscribe((r) => this.nomes.push({ nome: r.nome, id: regra }));
-        }
+  setNomes() {
+    for (let index = 0; index < this.pastas.length; index++) {
+      const element = this.pastas[index].regras;
+      for (let index = 0; index < element.length; index++) {
+        const regra = element[index];
+        this.service
+          .getOneRegra(regra)
+          .pipe(
+            map((r) => (r[`schemaregras`] = JSON.parse(r[`schemaregras`]))),
+            filter((regra) => regra && regra != null)
+          )
+          .subscribe((r) => {
+            this.nomes.push({ nome: r.nome, id: regra });
+          });
       }
     }
+  }
+  setClasse(id) {
+    this.sharedService.setClasse(id);
+  }
 }

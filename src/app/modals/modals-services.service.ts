@@ -62,14 +62,27 @@ export class ModalsServicesService {
     }
     return this.bsModalRef.content as ModalConfirmComponent;
   }
-  createAlert(type: string, msg: string) {
-    this.bsModalRef = this.modalService.show(ModalAlertComponent, {
+  createAlert(
+    type: string,
+    msg: string,
+    options: object = {
       class: 'modal-dialog-centered second',
       ignoreBackdropClick: false,
       id: 2,
-    });
+    }
+  ) {
+    this.bsModalRef = this.modalService.show(ModalAlertComponent, options);
     this.bsModalRef.content.type = type;
     this.bsModalRef.content.msg = msg;
+  }
+  createToast(type: string, msg: string) {
+    const options =
+    {
+      class: 'modal-dialog-centered text-center text-uppercase',
+      ignoreBackdropClick: false,
+      id: 2,
+    }
+    this.createAlert(type, msg, options);
   }
   createOption(onde, objeto) {
     this.bsModalRef = this.modalService.show(ModalRegraOptionComponent, {
@@ -81,14 +94,14 @@ export class ModalsServicesService {
     this.bsModalRef.content.onde = onde;
     this.bsModalRef.content.objeto = objeto;
   }
-  createVar(objetoCompleto, objeto?: object, varControler?:any) {
+  createVar(objetoCompleto, objeto?: object, varControler?: any) {
     this.bsModalRef = this.modalService.show(ModalNewVarComponent, {
       class: 'modal-dialog-centered modal-lg',
       ignoreBackdropClick: true,
       keyboard: false,
       id: 1,
     });
-    if(varControler){
+    if (varControler) {
       this.bsModalRef.content.varControler = varControler;
     }
     const variaveisCopy = Object.assign([], objetoCompleto[`variaveis`]);
@@ -124,11 +137,15 @@ export class ModalsServicesService {
   modalVariaveis(variaveis, only?: string) {
     this.bsModalRef = this.modalService.show(ModalVariaveisComponent, {
       class: 'modal-sm',
-      ignoreBackdropClick: false,
+      ignoreBackdropClick: true,
       keyboard: false,
       id: 1,
     });
     let variaveisCopy = Object.assign([], variaveis);
+    // this.bsModalRef.content.onde = onde;
+    // if (key) {
+    //   this.bsModalRef.content.key = key;
+    // }
     if (only) {
       this.bsModalRef.content.only = only;
     }
@@ -166,7 +183,7 @@ export class ModalsServicesService {
     this.bsModalRef.content.idregra = idregra;
     this.bsModalRef.content.entradaVar = entradaVar;
   }
-  createModalRegras(onde,regra) {
+  createModalRegras(onde, regra) {
     this.bsModalRef = this.modalService.show(ModalRegrasComponent, {
       class: 'modal-dialog-centered',
       ignoreBackdropClick: false,
@@ -174,9 +191,10 @@ export class ModalsServicesService {
       id: 1,
     });
     this.bsModalRef.content.onde = Object.assign(onde);
-    this.bsModalRef.content.regraId = regra;
+    regra.idregra = `Esta regra`;
+    this.bsModalRef.content.essa = regra;
   }
-  private async createVarForTree(variaveis: Array<any>) {
+   async createVarForTree(variaveis: Array<any>) {
     let auxArray = [];
     let obj = { modelo: null, valor: {} };
     for (const item of variaveis) {
@@ -259,7 +277,7 @@ export class ModalsServicesService {
   }
   private async buscarModelo(path) {
     let aux;
-    path = path.split(`.`);
+    path = path.replace(/\./,'&').split('&');
     await this.shared.getModelos(path[0], path[1]).then((response) => {
       aux = response.properties;
     });

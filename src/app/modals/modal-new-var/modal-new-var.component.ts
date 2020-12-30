@@ -20,7 +20,7 @@ export class ModalNewVarComponent implements OnInit {
   @Input() schema;
   @Input() varControler;
   @Input() pastas;
-
+  clicou = false;
   tipoarray;
   msg;
   model;
@@ -61,7 +61,7 @@ export class ModalNewVarComponent implements OnInit {
     this.objeto[`nome`] = formulario.value.nome;
     this.objeto[`valor`] = this.objeto[`valor`]
       ? this.objeto[`valor`]
-      : 'null';
+      : null;
     if (this.objeto[`modelo`] && this.objeto[`tipomodelo`]) {
       this.objeto[`tipomodelo`] = this.objeto[`tipomodelo`];
       this.objeto[`modelo`] = this.objeto[`modelo`];
@@ -117,7 +117,6 @@ export class ModalNewVarComponent implements OnInit {
       this.resetModelo();
     }
     this.objeto[`type`] = type;
-
   }
   async select(tipo) {
     this.resetModelo();

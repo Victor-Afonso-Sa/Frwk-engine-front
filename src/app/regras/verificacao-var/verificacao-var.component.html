@@ -1,0 +1,16 @@
+<span
+  [tooltip]="tootltipErro"
+  placement="auto"
+  [delay]="100"
+  triggers="hover"
+  class="material-icons {{ errorControl ? 'color-red' : 'color-green' }}"
+>
+  {{ errorControl ? "clear" : "done" }}
+</span>
+  <input
+    type="hidden"
+    id="variaveisArray"
+    name="variaveisArray"
+    [(ngModel)]="variaveisArray"
+    (ngModelChange)="verificarVariaveis()"
+  />

@@ -1,14 +1,17 @@
 <div class="escopo my-4 p-2" id="escopo{{ id }}" >
   <div class="d-flex justify-content-center">
-    <span class="material-icons seta"
-    tooltip="Mover para cima"
-    placement="auto"
-    [delay]="200"
-    container="body"
-    (click)="moverAcima()"
+    <span
+      class="material-icons seta"
+      tooltip="Mover para cima"
+      placement="auto"
+      [delay]="100"
+      triggers="hover"
+      container="body"
+      #popA="bs-tooltip"
+      (click)="moverAcima(); popA.hide()"
     >
       north
-      </span>
+    </span>
   </div>
   <div class="d-flex justify-content-between">
     <h4 class="align-self-start">{{ 'Iteração Interrompida (break) '}}</h4>
@@ -23,15 +26,18 @@
     </div>
   </div>
   <div class="d-flex justify-content-center">
-    <span class="material-icons seta mt-3"
-    tooltip="Mover para baixo"
-    placement="auto"
-    [delay]="200"
-    container="body"
-    (click)="moverAbaixo()"
+    <span
+      class="material-icons seta mt-3"
+      tooltip="Mover para baixo"
+      placement="auto"
+      [delay]="100"
+      triggers="hover"
+      #pop="bs-tooltip"
+      container="body"
+      (click)="moverAbaixo(); pop.hide()"
     >
       south
-      </span>
+    </span>
   </div>
 </div>
 

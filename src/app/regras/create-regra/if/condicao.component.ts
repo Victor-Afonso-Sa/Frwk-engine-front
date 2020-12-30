@@ -15,10 +15,8 @@ import { IfComponent } from './if/if.component';
 })
 export class CondicaoComponent extends EscopoClassComponent implements AfterViewInit {
   @Input() variaveis;
+  variavel = {type: `boolean`};
   aux;
-  ngOnInit(){
-    super.ngOnInit();
-  }
 
   openModalExpressao() {
     const obj = {

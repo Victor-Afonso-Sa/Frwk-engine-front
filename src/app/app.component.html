@@ -1,21 +1,44 @@
 <nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
   <a class="navbar-brand"></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarNavAltMarkup"
+    aria-controls="navbarNavAltMarkup"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
-    <div class="navbar-nav" >
-    <a class="title-nav nav-link" routerLinkActive="active"
+  <div
+    class="collapse navbar-collapse justify-content-center"
+    id="navbarNavAltMarkup"
+  >
+    <div class="navbar-nav">
+      <a
+        class="title-nav nav-link"
+        routerLinkActive="active"
+        [routerLink]="[{ outlets: { primary: ['model'], dash: null } }]"
+        >Model</a
+      >
 
-    [routerLink]="[{ outlets: { primary: ['model'], dash: null  }}]">Model</a>
-      <a class="title-nav nav-link"
-      routerLinkActive="active"
-      [routerLink]="[{ outlets: { dash: null ,primary: ['regras']}}]">Regra</a>
-
+      <a
+        class="title-nav nav-link"
+        routerLinkActive="active"
+        [routerLink]="[{ outlets: { dash: null, primary: ['regras'] } }]"
+        >Regra</a
+      >
+      <a
+        class="title-nav nav-link"
+        routerLinkActive="active"
+        [routerLink]="[{ outlets: { dash: null, primary: ['parametros'] } }]"
+        >Parâmetros</a
+      >
     </div>
   </div>
 </nav>
-<router-outlet></router-outlet>
-<div class="container-dash">
-  <router-outlet name='dash'></router-outlet>
+<div>
+  <router-outlet></router-outlet>
 </div>
+<router-outlet name="dash"></router-outlet>

@@ -1,4 +1,14 @@
 <div class="escopo my-1 p-2 {{ tipo }}" id="escopo{{ id }}" >
+  <app-verificacao-var
+  *ngIf="objetoLocal && objetoLocal['variaveis'] && objetoLocal['acao'] && this.objetoLocal['acao'].expressao"
+  [(errorControl)]="errorControl"
+  [(tootltipErro)]="tootltipErro"
+  [(variaveisArray)]="objetoLocal['variaveis']"
+  [(variavel)]="variavel"
+  [(expressao)]="this.objetoLocal['acao'].expressao"
+  [executar]="'expressao'"
+  (expressaoEmitter)="evaluate(null, $event[1], variavel)"
+  ></app-verificacao-var>
   <div class="row">
     <div class="col-10 d-flex">
       <h3 class="mx-1">{{ title() + ' ' }}</h3>

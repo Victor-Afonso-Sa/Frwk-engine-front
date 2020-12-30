@@ -7,6 +7,8 @@ import {
   IActionMapping,
   ITreeOptions,
 } from '@circlon/angular-tree-component';
+import { ParametrosService } from 'src/app/parametros/parametros.service';
+import { ModalsServicesService } from '../modals-services.service';
 
 @Component({
   selector: 'app-modal-variaveis',
@@ -16,11 +18,13 @@ import {
 export class ModalVariaveisComponent implements OnInit {
   constructor(
     private varService: NewVarService,
-    private service: BsModalService
+    private service: BsModalService,
+    private paramsService: ParametrosService,
   ) {}
   @Input() variaveis: Array<any>;
   @Input() only;
   error;
+  parametros;
   actionMapping: IActionMapping = {
     mouse: {
       dblClick: (tree, node, $event) => {
@@ -32,7 +36,11 @@ export class ModalVariaveisComponent implements OnInit {
     displayField: 'nome',
     actionMapping: this.actionMapping,
   };
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.paramsService.getParametrosModif().then(
+      params => this.parametros = params
+    )
+  }
     setKeys(item) {
     if (Object.keys(item).length >= 0) {
       return true;
@@ -55,6 +63,9 @@ export class ModalVariaveisComponent implements OnInit {
       this.varService.variavel.emit(value);
       this.service.hide();
     }
-
+  }
+  hide(){
+    this.varService.variavel.emit(null);
+    this.service.hide();
   }
 }

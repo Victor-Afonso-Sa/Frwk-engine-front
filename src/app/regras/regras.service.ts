@@ -8,7 +8,7 @@ import {
   Output,
 } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { finalize, take } from 'rxjs/operators';
+import { finalize, map, switchMap, take } from 'rxjs/operators';
 import { AtribuicaoComponent } from './create-regra/atribuicao/atribuicao.component';
 import { BreakComponent } from './create-regra/break/break.component';
 import { DynamicComponentComponent } from './create-regra/dynamic-component/dynamic-component.component';
@@ -19,6 +19,11 @@ import { IteracaoComponent } from './create-regra/iteracao/iteracao.component';
 import { RetornarComponent } from './create-regra/retornar/retornar.component';
 import { ExecutarRegraComponent } from './create-regra/executar-regra/executar-regra.component';
 import { SharedService } from '../shared.service';
+import { ManipulacaoArrayComponent } from './create-regra/manipulacao-array/manipulacao-array.component';
+import { NewVarService } from '../modals/modal-new-var/new-var.service';
+import { variable } from '@angular/compiler/src/output/output_ast';
+import { isUndefined } from 'util';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -29,9 +34,10 @@ export class RegrasService {
     private applicationRef: ApplicationRef,
     private componentFactoryResolver: ComponentFactoryResolver,
     private http: HttpClient,
-    private shared: SharedService
+    private shared: SharedService,
+    private varService: NewVarService
   ) {}
-  readonly URI = '/api/engine/regra';
+  readonly URI = environment.BANCO + '/regra';
   id = 0;
   objetoRegra;
   pasta;
@@ -44,30 +50,62 @@ export class RegrasService {
   setPasta(pasta) {
     this.pasta = pasta;
   }
-  setRegras(element, edit?: boolean) {
-    if (!edit) {
-      this.shared
-        .getOnePastaRegras(element.schemaregras.pasta)
-        .subscribe((v) => {
+  editarRegra(element) {
+    this.shared
+      .getOnePastaRegras(element.schemaregras.pasta)
+      .pipe(
+        map((v) => {
           v[`regras`] = JSON.parse(v[`regras`]);
-          this.http
-            .post(this.URI, element)
-            .pipe(
-              take(1),
-              finalize(() => {
-                v[`regras`].push(element.idregra);
+          return v;
+        }),
+        switchMap((v) =>
+          this.atualizarRegra(element).pipe(
+            finalize(() => {
+              const obj = {
+                idregra: element.idregra,
+                nome: element.schemaregras.nome,
+              };
+              const index = v[`regras`].findIndex(
+                (r) => r.idregra == element.idregra
+              );
+              if (index >= 0) {
+                v[`regras`].splice(index, 1, obj);
                 this.atualizar.emit(Object.assign({}, v));
-                v[`regras`] = JSON.stringify(v[`regras`]);
-                this.shared.putPastaRegras(v).subscribe();
-              })
-            )
-            .subscribe();
-        });
-    } else {
-      this.atualizarRegra(element).pipe(take(1)).subscribe();
-    }
+              }
+              v[`regras`] = JSON.stringify(v[`regras`]);
+              this.shared.putPastaRegras(v).subscribe();
+            })
+          )
+        )
+      )
+      .subscribe();
   }
-
+  salvarRegra(element) {
+    this.shared
+      .getOnePastaRegras(element.schemaregras.pasta)
+      .pipe(
+        map((v) => {
+          v[`regras`] = JSON.parse(v[`regras`]);
+          return v;
+        }),
+        switchMap((v) =>
+          this.http.post(this.URI, element).pipe(
+            take(1),
+            finalize(() => {
+              const obj = {
+                idregra: element.idregra,
+                nome: element.schemaregras.nome,
+              };
+              v[`regras`].push(obj);
+              this.atualizar.emit(Object.assign({}, v));
+              v[`regras`] = JSON.stringify(v[`regras`]);
+              this.shared.putPastaRegras(v).subscribe();
+            })
+          )
+        )
+      )
+      .subscribe();
+  }
   showEscopo(tipo, where, objeto, objEdit?: object) {
     let factory;
     let t = this.setComponente(tipo);
@@ -79,6 +117,7 @@ export class RegrasService {
         dynamicComponentRef.instance['edicao'] = true;
         dynamicComponentRef.instance['id'] = objeto.id;
         dynamicComponentRef.instance['objEdit'] = objEdit;
+        this.id = objeto.id;
       } else {
         dynamicComponentRef.instance['id'] = this.id;
       }
@@ -128,34 +167,26 @@ export class RegrasService {
     if (!callback) {
       if (
         obj.variaveis &&
-        obj.variaveis.indexOf(
-          obj.variaveis.find(
-            (v) => v.nome === antigo.nome && v.type === antigo.type
-          )
+        obj.variaveis.findIndex(
+          (v) => v.nome === antigo.nome && v.type === antigo.type
         ) >= 0
       ) {
         obj.variaveis.splice(
-          obj.variaveis.indexOf(
-            obj.variaveis.find(
-              (v) => v.nome === antigo.nome && v.type === antigo.type
-            )
+          obj.variaveis.findIndex(
+            (v) => v.nome === antigo.nome && v.type === antigo.type
           ),
           1,
           valor
         );
         if (
           obj.variaveisLocal &&
-          obj.variaveisLocal.indexOf(
-            obj.variaveisLocal.find(
-              (v) => v.nome === antigo.nome && v.type === antigo.type
-            )
+          obj.variaveisLocal.findIndex(
+            (v) => v.nome === antigo.nome && v.type === antigo.type
           ) >= 0
         ) {
           obj.variaveisLocal.splice(
-            obj.variaveisLocal.indexOf(
-              obj.variaveisLocal.find(
-                (v) => v.nome === antigo.nome && v.type === antigo.type
-              )
+            obj.variaveisLocal.findIndex(
+              (v) => v.nome === antigo.nome && v.type === antigo.type
             ),
             1,
             valor
@@ -166,10 +197,8 @@ export class RegrasService {
     if (obj[`itens`]) {
       obj[`itens`].forEach((element) => {
         if (element.variaveis) {
-          const index = element.variaveis.indexOf(
-            element.variaveis.find(
-              (v) => v.nome === antigo.nome && v.type === antigo.type
-            )
+          const index = element.variaveis.findIndex(
+            (v) => v.nome === antigo.nome && v.type === antigo.type
           );
           if (index >= 0) {
             element.variaveis.splice(index, 1, valor);
@@ -177,17 +206,13 @@ export class RegrasService {
         } else if (element.itens) {
           if (
             element.variaveisescopo &&
-            element.variaveisescopo.indexOf(
-              element.variaveisescopo.find(
-                (v) => v.nome === antigo.nome && v.type === antigo.type
-              )
+            element.variaveisescopo.findIndex(
+              (v) => v.nome === antigo.nome && v.type === antigo.type
             ) >= 0
           ) {
             element.variaveisescopo.splice(
-              element.variaveisescopo.indexOf(
-                element.variaveisescopo.find(
-                  (v) => v.nome === antigo.nome && v.type === antigo.type
-                )
+              element.variaveisescopo.findIndex(
+                (v) => v.nome === antigo.nome && v.type === antigo.type
               ),
               1,
               valor
@@ -197,36 +222,32 @@ export class RegrasService {
         this.editarVariaveisEscopo(element, valor, antigo, true);
       });
     }
+    this.varService.verificacao.emit(true);
   }
   excluirVariaveisEscopo(obj, where, callback?: boolean) {
     if (!callback) {
       if (obj.variaveis) {
         obj.variaveis.splice(
-          obj.variaveis.indexOf(
-            obj.variaveis.find(
-              (v) => v.nome === where.nome && v.type === where.type
-            )
+          obj.variaveis.findIndex(
+            (v) => v.nome === where.nome && v.type === where.type
           ),
           1
         );
         if (obj.variaveisLocal) {
           obj.variaveisLocal.splice(
-            obj.variaveisLocal.indexOf(
-              obj.variaveisLocal.find(
-                (v) => v.nome === where.nome && v.type === where.type
-              )
+            obj.variaveisLocal.findIndex(
+              (v) => v.nome === where.nome && v.type === where.type
             ),
             1
           );
         }
       }
     }
-    obj[`itens`].forEach((element) => {
+    for (let index = 0; index < obj[`itens`].length; index++) {
+      const element = obj[`itens`][index];
       if (element.variaveis) {
-        const index = element.variaveis.indexOf(
-          element.variaveis.find(
-            (v) => v.nome === where.nome && v.type === where.type
-          )
+        const index = element.variaveis.findIndex(
+          (v) => v.nome === where.nome && v.type === where.type
         );
         if (index >= 0) {
           element.variaveis.splice(index, 1);
@@ -234,24 +255,21 @@ export class RegrasService {
       } else if (element.itens) {
         if (
           element.variaveisescopo &&
-          element.variaveisescopo.indexOf(
-            element.variaveisescopo.find(
-              (v) => v.nome === where.nome && v.type === where.type
-            )
+          element.variaveisescopo.findIndex(
+            (v) => v.nome === where.nome && v.type === where.type
           ) >= 0
         ) {
           element.variaveisescopo.splice(
-            element.variaveisescopo.indexOf(
-              element.variaveisescopo.find(
-                (v) => v.nome === where.nome && v.type === where.type
-              )
+            element.variaveisescopo.findIndex(
+              (v) => v.nome === where.nome && v.type === where.type
             ),
             1
           );
         }
       }
       this.excluirVariaveisEscopo(element, where, true);
-    });
+      this.varService.verificacao.emit(true);
+    }
   }
   setComponente(tipo) {
     let retorno;
@@ -277,6 +295,9 @@ export class RegrasService {
       case `iteracao`:
         retorno = IteracaoComponent;
         break;
+      case `manipularArray`:
+        retorno = ManipulacaoArrayComponent;
+        break;
       case `executarRegra`:
         retorno = ExecutarRegraComponent;
         break;
@@ -291,9 +312,9 @@ export class RegrasService {
     return retorno;
   }
   verificarModelos(obj, setErro) {
-    if(obj.tipomodelo && obj.modelo){
+    if (obj.tipomodelo && obj.modelo) {
       const objErro = { atualizacao: obj.nome };
-      const path = obj.tipomodelo.split(`.`);
+      const path = obj.tipomodelo.replace(/\./, '&').split('&');
       this.shared
         .getModelos(path[0], path[1])
         .then((modelo) => {
@@ -316,5 +337,23 @@ export class RegrasService {
     delete obj[`modelo`];
     delete obj[`tipomodelo`];
     delete obj[`tipoitems`];
+  }
+  verificarVariaveis(objVar: Array<object>, variavel: object, only?: string) {
+    if (
+      objVar.findIndex((v) => {
+        if (only) {
+          return (
+            (v[`nome`] == variavel[`id`] || v[`nome`] == variavel[`nome`]) &&
+            v[`type`] == only
+          );
+        } else {
+          return v[`nome`] == variavel[`id`] || v[`nome`] == variavel[`nome`];
+        }
+      }) >= 0
+    ) {
+      return false;
+    } else {
+      return true;
+    }
   }
 }

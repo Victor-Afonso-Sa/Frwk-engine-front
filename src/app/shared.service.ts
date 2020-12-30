@@ -3,6 +3,7 @@ import { EventEmitter, Injectable, Output } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { finalize, map, take, takeUntil } from 'rxjs/operators';
 import * as dateFormat from 'dateformat';
+import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
@@ -11,7 +12,7 @@ export class SharedService {
   excluirModelo = new Subject<any>();
   editarPath = {};
   modelEditar = {};
-  readonly URI = '/api/engine';
+  readonly URI = environment.BANCO;
   constructor(private http: HttpClient) {}
 
   getPastas() {
@@ -103,7 +104,7 @@ export class SharedService {
     return value;
   }
   async buscarModelo(path) {
-    path = path.split(`.`);
+    path = path.replace(/\./,'&').split('&');
     let obj;
     obj = await this.getModelos(path[0], path[1]);
     return this.jsonGenerate(obj);
@@ -136,7 +137,7 @@ export class SharedService {
       JSON.parse(string);
       return [true, `Json valido`];
     } catch (e) {
-      return [false, e];
+      return[false, e];
     }
   }
   getPastaRegras() {
@@ -146,7 +147,6 @@ export class SharedService {
     return this.http.post(this.URI + '/pastaregras', value);
   }
   putPastaRegras(value) {
-
     return this.http.put(this.URI + '/pastaregras', value);
   }
   getOnePastaRegras(id) {
@@ -154,5 +154,24 @@ export class SharedService {
   }
   deletePastaRegras(id) {
     return this.http.delete(this.URI + '/pastaregras', { params: { id: id } });
+  }
+  setClasse(id) {
+    this.retirarSelected();
+    const active = document.getElementById(id);
+    if (active) {
+      active.className = `selected`;
+    }
+  }
+  retirarSelected() {
+    const items = document.getElementsByClassName(`item`);
+    for (let index = 0; index < items.length; index++) {
+      const atual = document.getElementsByClassName('selected');
+      if (atual.length > 0) {
+        for (let index = 0; index < atual.length; index++) {
+          const element = atual[index];
+          element.className = element.className.replace('selected', 'item');
+        }
+      }
+    }
   }
 }

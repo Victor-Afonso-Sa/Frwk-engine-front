@@ -12,7 +12,7 @@ import { SharedService } from 'src/app/shared.service';
 export class ModalRegrasComponent implements OnInit {
   regras = [];
   onde;
-  regraId;
+  essa;
   actionMapping: IActionMapping = {
     mouse: {
       dblClick: (tree, node, $event) => {
@@ -37,7 +37,7 @@ export class ModalRegrasComponent implements OnInit {
   ngOnInit() {
     this.serviceRegras.getRegras().subscribe((regras: Array<any>) => {
       if (regras) {
-        this.regras = regras;
+        this.regras = [this.essa,...regras];
       }
     });
   }

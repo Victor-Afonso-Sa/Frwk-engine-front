@@ -28,6 +28,7 @@ import { TestRegraComponent } from './test-regra/test-regra.component';
     TestRegraComponent
   ],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, TreeModule,TiposModule],
+  exports:[ExpressaoComponent],
   providers: [],
 })
 export class ModalsModule {}

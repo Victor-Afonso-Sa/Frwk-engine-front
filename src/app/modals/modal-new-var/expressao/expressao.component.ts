@@ -16,6 +16,7 @@ import {
   take,
   tap,
 } from 'rxjs/operators';
+import { ParametrosService } from 'src/app/parametros/parametros.service';
 import { SharedService } from 'src/app/shared.service';
 import { NewVarService } from '../new-var.service';
 
@@ -27,9 +28,10 @@ import { NewVarService } from '../new-var.service';
 export class ExpressaoComponent implements OnInit {
   @Input() model;
   @Input() edit;
-  @Input() variaveis;
+  @Input() variaveis = [];
   @Input() formulario;
   @Input() objeto = {};
+  parametros = [];
   valor = new FormControl(
     this.objeto[`valor`] ? JSON.stringify(this.objeto[`valor`]) : ` `,
     Validators.required
@@ -49,12 +51,11 @@ export class ExpressaoComponent implements OnInit {
     actionMapping: this.actionMapping,
   };
   @Output() jsonEmitter: EventEmitter<boolean> = new EventEmitter();
-  // @Input() ;
 
   constructor(
     private shared: SharedService,
     private varService: NewVarService,
-    private modalService: BsModalService
+    private paramsService: ParametrosService
   ) {}
 
   ngOnInit() {
@@ -63,13 +64,21 @@ export class ExpressaoComponent implements OnInit {
       .pipe(
         distinctUntilChanged(),
         debounceTime(200),
-        tap(v => {this.verificado = false;this.jsonError = true;}),
+        tap((v) => {
+          this.verificado = false;
+          this.jsonError = true;
+          this.jsonEmitter.emit(this.jsonError);
+        }),
         filter((valor) => valor && valor.length > 0)
       )
       .subscribe((valor) => {
         this.verificado = false;
         this.jsonError = true;
-        if (this.objeto[`modelo`]) {
+        if (
+          this.objeto[`modelo`] ||
+          this.objeto[`type`] == `array` ||
+          this.objeto[`type`] == `modelo`
+        ) {
           this.jsonTest(valor);
         } else {
           this.verificarValor(valor);
@@ -80,10 +89,15 @@ export class ExpressaoComponent implements OnInit {
       .subscribe((close) =>
         this.edit ? (this.objeto[`valor`] = this.edit[`valor`]) : null
       );
+    this.paramsService
+      .getParametrosModif()
+      .then((params) => (this.parametros = params));
   }
   jsonTest(json) {
     this.verificado = true;
-    this.isValidJSON(json);
+    const log = this.isValidJSON(json);
+    this.jsonError = log[0];
+    this.msg = log[1];
     this.jsonEmitter.emit(this.jsonError);
   }
   isValidJSON(json) {
@@ -97,24 +111,24 @@ export class ExpressaoComponent implements OnInit {
   async verificarValor(value) {
     try {
       let expressao = ``;
+      const array = [...this.variaveis, ...this.parametros];
       if (
-        this.variaveis.length > 0 &&
+        array &&
+        array.length > 0 &&
         (this.objeto[`type`] != 'modelo' ||
           this.objeto[`type`] != 'entrada' ||
           this.objeto[`type`] != 'saida')
       ) {
-        for (let i = 0; i < this.variaveis.length; i++) {
-          if (this.variaveis[i] != this.objeto) {
+        for (let i = 0; i < array.length; i++) {
+          if (array[i] != this.objeto) {
             expressao += await this.varService.verificadorEval(
-              this.variaveis[i]
+              array[i]
             );
           }
         }
       }
-      if (this.objeto[`type`] != `modelo`) {
-        expressao += await this.varService.verificadorType(this.objeto, value);
-        eval(expressao);
-      }
+      expressao += await this.varService.verificadorType(this.objeto, value);
+      eval(expressao);
       this.jsonError = true;
       this.msg = `Valido`;
       this.jsonEmitter.emit(this.jsonError);

@@ -30,6 +30,7 @@ export class ModalExpressaoComponent implements OnInit {
   ];
   ngOnInit() {}
   hide() {
+    this.service.expressao.emit(null);
     this.bsService.hide();
   }
   save() {

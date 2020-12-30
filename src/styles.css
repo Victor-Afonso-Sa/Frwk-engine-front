@@ -133,8 +133,15 @@ iframe {
   font-size: medium;
   cursor: pointer;
 }
-.acc-100 li:hover :not(.mais){
+.acc-100 li:hover:not(.mais,.liMais){
   padding: 2%;
+  color: #e9832b;
+  -webkit-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+}
+.selected{
+  padding: 3% ;
   color: #e9832b;
   -webkit-transform: scale(1);
   -ms-transform: scale(1);
@@ -145,7 +152,7 @@ iframe {
   border-radius: 4%;
   margin-top: 5px;
 }
-.mais:hover{
+.mais-active, .mais:hover{
   box-shadow:
   1px 1px #4BB543,
   2px 2px #4BB543,
@@ -192,7 +199,7 @@ body {
 tree-root div.angular-tree-component {
   display: flex;
   align-content: space-between;
-  justify-content: flex-start;
+  justify-content: center;
   flex-direction: row !important;
   flex-wrap: wrap;
 }
@@ -203,10 +210,11 @@ tree-root div .node-content-wrapper {
   padding: 2px 14px;
   border-radius: 5px;
   transition: background-color 0.15s, box-shadow 0.15s;
+  min-width: 150px;
 }
 tree-root div .node-wrapper {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
 }
 tree-root div .node-content-wrapper-active,
 tree-root div .node-content-wrapper.node-content-wrapper-active:hover,
@@ -325,12 +333,13 @@ tree-root .toggle-children {
 }
 .seta{
   padding: .5%;
-  border: #7900df 1pt solid;
+  border: #000 1pt solid;
   border-radius: 100%;
-
+  cursor: pointer;
 }
 .seta:hover{
 color: white;
-background-color: #7900df;
+background-color: #000;
 opacity: 0.9;
 }
+

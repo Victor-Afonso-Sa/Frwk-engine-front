@@ -21,6 +21,8 @@ import { TiposComponent } from '../tipos/tipos/tipos.component';
 import { TiposModule } from '../tipos/tipos/tipos.module';
 import { ExecutarRegraComponent } from './create-regra/executar-regra/executar-regra.component';
 import { CreateVariavelComponent } from './create-regra/create-variavel/create-variavel.component';
+import { ManipulacaoArrayComponent } from './create-regra/manipulacao-array/manipulacao-array.component';
+import { VerificacaoVarModule } from './verificacao-var/verificacao-var.module';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,8 @@ import { CreateVariavelComponent } from './create-regra/create-variavel/create-v
     EnquantoComponent,
     IteracaoComponent,
     ExecutarRegraComponent,
-    CreateVariavelComponent
+    CreateVariavelComponent,
+    ManipulacaoArrayComponent
   ],
   imports: [
     CommonModule,
@@ -46,7 +49,8 @@ import { CreateVariavelComponent } from './create-regra/create-variavel/create-v
     TooltipModule.forRoot(),
     AccordionModule.forRoot(),
     ModalModule.forRoot(),
-    TiposModule
+    TiposModule,
+    VerificacaoVarModule
   ],
   entryComponents: [
     DynamicComponentComponent,
@@ -56,6 +60,8 @@ import { CreateVariavelComponent } from './create-regra/create-variavel/create-v
     AtribuicaoComponent,
     IfComponent,
     BreakComponent,
+    ExecutarRegraComponent,
+    ManipulacaoArrayComponent
   ],
 })
 export class RegrasModule {}

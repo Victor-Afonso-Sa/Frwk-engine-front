@@ -1,6 +1,6 @@
 <form #formulario="ngForm" (submit)="save(formulario)">
   <div class="modal-header">
-    <h4 class="modal-title pull-left">Nova variável</h4>
+    <h4 class="modal-title pull-left">{{(edit ? 'Editar': 'Criar') + ' variável'}}</h4>
     <button
       type="button"
       class="close pull-right"
@@ -17,7 +17,7 @@
           >Nome da variável:
         </label>
         <input
-          pattern="[^0-9][a-zA-Z0-9]*"
+          pattern="^[a-zA-Z][a-zA-Z0-9]*"
           class="form-control"
           autocomplete="off"
           required
@@ -70,8 +70,9 @@
     <div class="d-flex justify-content-center">
       <button
         class="btn btn-outline-success mx-2"
-        [disabled]="!(formulario.valid && jsonError)"
+        [disabled]="!(formulario.valid && jsonError) || !(objeto['type'].length > 0) || clicou"
         type="submit"
+        (click)="clicou = true"
       >
         {{ "Salvar" }}
       </button>

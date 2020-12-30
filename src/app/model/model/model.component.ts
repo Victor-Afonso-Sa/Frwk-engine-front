@@ -100,7 +100,7 @@ export class ModelComponent implements OnInit {
   editPasta(pasta, pastas) {
     this.modalService.createPasta(pastas,`modelo`, pasta, pasta.schemapastas.nomePasta);
   }
-  log(v) {
-    console.log(v);
+  setClasse(id) {
+    this.shared.setClasse(id);
   }
 }

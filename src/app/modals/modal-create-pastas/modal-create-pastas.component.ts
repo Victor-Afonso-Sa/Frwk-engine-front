@@ -4,6 +4,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { take } from 'rxjs/operators';
+import { ParametrosService } from 'src/app/parametros/parametros.service';
 import { SharedService } from 'src/app/shared.service';
 
 @Component({
@@ -16,7 +17,7 @@ export class ModalCreatePastasComponent implements OnInit {
   constructor(
     private modalService: BsModalService,
     private shared: SharedService,
-    private router: ActivatedRoute
+    private paramsService: ParametrosService
   ) {}
   @Input() editar = false;
   @Input() nome;
@@ -26,6 +27,7 @@ export class ModalCreatePastasComponent implements OnInit {
   @Input() pasta;
   obj = {};
   errorMsg: string;
+  click = false;
   @Input() indexPasta;
   ngOnInit(): void {}
   hide() {
@@ -44,7 +46,6 @@ export class ModalCreatePastasComponent implements OnInit {
       const id = this.nomePasta.value
         .toString()
         .trim()
-
         .replace(/ /g, '')
         .toLowerCase();
       let body = { idpasta: id, schemapastas: this.obj };
@@ -61,13 +62,37 @@ export class ModalCreatePastasComponent implements OnInit {
       this.shared
         .postPastaRegras(this.obj)
         .pipe(take(1))
-        .subscribe((value) => {
-          if (value) {
-            value[`regras`] = JSON.parse(value[`regras`]);
-            this.pastas.push(value);
-          }
-        });
-      this.modalService.hide(1);
+        .subscribe(
+          (value) => {
+            if (value) {
+              value[`regras`] = JSON.parse(value[`regras`]);
+              this.pastas.push(value);
+            }
+          },
+          () => {},
+          () => this.modalService.hide(1)
+        );
+    } else if (this.mode == `parametros`) {
+      this.obj['nome'] = this.nomePasta.value;
+      this.obj['idpasta'] = this.nomePasta.value
+        .toString()
+        .trim()
+        .replace(/ /g, '')
+        .toLowerCase();
+      this.obj['parametros'] = '[]';
+      this.paramsService
+        .postParametros(this.obj)
+        .pipe(take(1))
+        .subscribe(
+          (value) => {
+            if (value) {
+              value[`parametros`] = JSON.parse(value[`parametros`]);
+              this.pastas.push(value);
+            }
+          },
+          () => {},
+          () => this.modalService.hide(1)
+        );
     }
   }
   edit() {
@@ -78,25 +103,41 @@ export class ModalCreatePastasComponent implements OnInit {
       this.pasta.schemapastas.nomePasta = this.nomePasta.value;
       this.shared.atualizarPasta(this.pasta).subscribe();
       this.modalService.hide(1);
-    }else if( this.mode == `regra`){
+    } else if (this.mode == `regra`) {
       const objAux = {
         nome: this.nomePasta.value,
         idpasta: this.pasta.idpasta,
-        regras: JSON.stringify(this.pasta.regras)
+        regras: JSON.stringify(this.pasta.regras),
       };
       this.shared.putPastaRegras(objAux).subscribe(
-        v=>{},
-        error=>{},
-        ()=> this.pasta.nome = this.nomePasta.value
+        (v) => {},
+        (error) => {},
+        () => {
+          this.pasta.nome = this.nomePasta.value;
+          this.modalService.hide(1);
+        }
       );
-      this.modalService.hide(1);
+    } else if (this.mode == `parametros`) {
+      const objAux = {
+        nome: this.nomePasta.value,
+        idpasta: this.pasta.idpasta,
+        parametros: JSON.stringify(this.pasta.parametros),
+      };
+      this.paramsService.putParametros(objAux).subscribe(
+        (v) => {},
+        (error) => {},
+        () => {
+          this.pasta.nome = this.nomePasta.value;
+          this.modalService.hide(1);
+        }
+      );
     }
   }
   verificarExistencia(value) {
-    value = value.toString().trim().replace(/ /g, '.').toLowerCase();
+    const id = value.toString().trim().replace(/ /g, '.').toLowerCase();
     let control = false;
     this.pastas.forEach((pasta) => {
-      if (pasta.idpasta == value && value != this.pasta?.idpasta) {
+      if ((pasta.idpasta == id && id != this.pasta?.idpasta) || (pasta.nome == value && value != this.pasta?.nome)) {
         control = true;
       }
     });

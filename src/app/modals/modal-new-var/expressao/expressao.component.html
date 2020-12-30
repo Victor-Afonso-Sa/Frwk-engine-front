@@ -14,8 +14,16 @@
           [(ngModel)]="objeto['valor']"
         ></textarea>
       </p>
-      <div class="border mt-2 ">
-      <tree-root  [nodes]="variaveis" [options]="options"></tree-root>
+      <div class="border-var mt-2 row" *ngIf="variaveis && variaveis.length > 0" >
+        <div class="col  text-center">
+          <h5>Variáveis:</h5>
+          <tree-root [nodes]="variaveis" [options]="options"></tree-root>
+        </div>
+        <div class="col text-center" *ngIf="parametros && parametros.length > 0" >
+          <h5>Parâmetros:</h5>
+          <tree-root  [nodes]="parametros" [options]="options">
+          </tree-root>
+        </div>
       </div>
         <div class="mt-3" *ngIf="verificado" >
           <div *ngIf="!jsonError"  class="alert alert-danger mx-auto text-center text-uppercase">{{ msg }}</div>

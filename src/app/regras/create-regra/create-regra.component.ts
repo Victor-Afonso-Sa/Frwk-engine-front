@@ -30,23 +30,29 @@ export class CreateRegraComponent implements OnInit, AfterViewInit {
   objeto;
   objetoEditCopy = {};
   edit = false;
-  title = 'Monte sua regra';
+  title = 'Crie sua regra';
   idregra;
+  display = false;
   ngOnInit() {
     this.objeto = this.service.objetoRegra;
     this.active.params.forEach((element) => {
       if (element['id']) {
         this.edit = true;
         this.idregra = element[`id`];
+      } else {
+        this.display = true;
       }
     });
     if (!this.objeto) {
-      this.route.navigate([{ outlets: { primary: [`regras`], dash: null } }])
+      this.route.navigate([{ outlets: { primary: [`regras`], dash: null } }]);
     }
   }
   ngAfterViewInit() {
     if (this.edit && this.objeto) {
-      setInterval(() => (this.title = 'Edite sua regra'));
+      setInterval(() => {
+        this.title = 'Editar: ' + this.objeto.schemaregras.nome;
+        this.display = true;
+      });
       this.createEdit();
     }
   }
@@ -54,7 +60,7 @@ export class CreateRegraComponent implements OnInit, AfterViewInit {
     this.modals.createOption('bodyRegra', this.objeto['schemaregras']);
   }
   salvar() {
-    this.service.setRegras(this.objeto);
+    this.service.editarRegra(this.objeto);
     this.enviado = true;
     this.route.navigate([{ outlets: { primary: [`regras`], dash: null } }]);
   }
@@ -75,7 +81,7 @@ export class CreateRegraComponent implements OnInit, AfterViewInit {
     }
   }
   editar() {
-    this.service.setRegras(this.objeto, true);
+    this.service.editarRegra(this.objeto);
     this.enviado = true;
     this.route.navigate([{ outlets: { primary: [`regras`], dash: null } }]);
   }

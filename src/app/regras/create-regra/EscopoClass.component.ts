@@ -28,6 +28,7 @@ export class EscopoClassComponent implements OnInit {
     protected confirmService?: ConfirmService,
     protected option?: OptionService
   ) {}
+  clicou = false;
   edicaoNome = false;
   @Input() objEdit;
   @Input() edicao = false;
@@ -38,7 +39,8 @@ export class EscopoClassComponent implements OnInit {
   objetoLocal = {};
   str: string;
   schema = ``;
-
+  errorControl = false;
+  tootltipErro = null;
   ngOnInit() {
     setTimeout(() => {
       this.init();
@@ -50,12 +52,12 @@ export class EscopoClassComponent implements OnInit {
       this.setRegra();
     }
   }
-  editNome(){
+  editNome() {
     this.edicaoNome = true;
   }
-  setNome(){
+  setNome() {
     this.edicaoNome = false;
-    if(this.str.length > 0){
+    if (this.str.length > 0) {
       this.objetoLocal[`nome`] = this.str;
     }
   }
@@ -107,32 +109,25 @@ export class EscopoClassComponent implements OnInit {
   setTotVariaveis() {
     let retorno = [];
     if (this.objeto[`variaveis`]) {
-      if (this.objeto[`variaveisfixas`]) {
-        retorno = [
-          ...this.objeto[`variaveis`]
-        ];
+      if (this.objeto[`variaveisescopo`]) {
+        retorno = [...this.objeto[`variaveisescopo`]];
       } else {
         retorno = [...this.objeto[`variaveis`]];
       }
     }
     return retorno;
   }
-  openVariaveis(only?: string) {
-    if(only){
-      this.modals.modalVariaveis(this.objetoLocal[`variaveis`], only);
-    }else{
-      this.modals.modalVariaveis(this.objetoLocal[`variaveis`]);
+  openVariaveis(only?: string, variaveis?:Array<any>) {
+    const varArray = variaveis ? variaveis : this.objetoLocal[`variaveis`];
+    if (only) {
+      this.modals.modalVariaveis(varArray, only);
+    } else {
+      this.modals.modalVariaveis(varArray);
     }
   }
-  confirmDelete(number){
-    if (
-      this.objeto.itens &&
-      this.objeto.itens.indexOf(this.objetoLocal) >= 0
-    ) {
-      this.objeto.itens.splice(
-        this.objeto.itens.indexOf(this.objetoLocal),
-        1
-      );
+  confirmDelete(number) {
+    if (this.objeto.itens && this.objeto.itens.indexOf(this.objetoLocal) >= 0) {
+      this.objeto.itens.splice(this.objeto.itens.indexOf(this.objetoLocal), 1);
     } else if (
       this.objeto.schemaregras.itens &&
       this.objeto.schemaregras.itens.indexOf(this.objetoLocal) >= 0
@@ -145,19 +140,61 @@ export class EscopoClassComponent implements OnInit {
     this.service.remove(number);
   }
   moverAcima() {
-    const array = this.objeto.schemaregras[`itens`];
+    const array =
+      `schemaregras` in this.objeto
+        ? this.objeto.schemaregras[`itens`]
+        : this.objeto[`itens`];
     const index = array.indexOf(this.objetoLocal);
-    if(index >= 0){
-      document.getElementById(`escopo${array[index-1][`id`]}`).before(document.getElementById(`escopo${this.id}`))
-      array.splice((index-1), 0, array.splice(index, 1)[0]);
+    const sub = index - 1 ;
+    if (index >= 0 && sub >=0) {
+      try {
+        document
+          .getElementById(`escopo${array[sub][`id`]}`)
+          .before(document.getElementById(`escopo${this.id}`));
+        array.splice(sub, 0, array.splice(index, 1)[0]);
+      } catch (e) {
+        console.log(e);
+
+      }
     }
   }
   moverAbaixo() {
-    const array = this.objeto.schemaregras[`itens`];
+    const array =
+      `schemaregras` in this.objeto
+        ? this.objeto.schemaregras[`itens`]
+        : this.objeto[`itens`];
     const index = array.indexOf(this.objetoLocal);
-    if(index >= 0){
-      document.getElementById(`escopo${array[index+1][`id`]}`).after(document.getElementById(`escopo${this.id}`))
-      array.splice((index+1), 0, array.splice(index, 1)[0]);
+    const sub = index + 1 ;
+    if (index >= 0 && sub < array.length) {
+      try {
+        document
+          .getElementById(`escopo${array[sub][`id`]}`)
+          .after(document.getElementById(`escopo${this.id}`));
+        array.splice(sub, 0, array.splice(index, 1)[0]);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }
+  async evaluate(variavel, valor, IntERNALvar?: object) {
+    let expressao = ``;
+    try {
+      expressao += await this.variavelService.iniciarParametros();
+      for (let i = 0; i < this.objetoLocal[`variaveis`].length; i++) {
+        expressao += await this.variavelService.verificadorEval(
+          this.objetoLocal[`variaveis`][i]
+        );
+      }
+      expressao += await this.variavelService.verificadorType(
+        variavel ? variavel : IntERNALvar,
+        valor
+      );
+      eval(expressao);
+      this.errorControl = false;
+      this.tootltipErro = null;
+    } catch (error) {
+      this.errorControl = true;
+      this.tootltipErro = 'A expressão contém erros';
     }
   }
 }

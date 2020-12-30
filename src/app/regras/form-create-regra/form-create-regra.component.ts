@@ -16,8 +16,10 @@ import {
   tap,
 } from 'rxjs/operators';
 import { ModalsServicesService } from 'src/app/modals/modals-services.service';
+import { ParametrosService } from 'src/app/parametros/parametros.service';
 
 import { SharedService } from 'src/app/shared.service';
+import { TiposService } from 'src/app/tipos/tipos/tipos.service';
 import { RegrasService } from '../regras.service';
 import { FormRegraService } from './form-regra.service';
 
@@ -38,13 +40,21 @@ export class FormCreateRegraComponent implements OnInit {
   formulario: FormGroup;
   objetoEntrada = { nome: `entrada` };
   objetoSaida = { nome: `saida` };
+  varControler = {
+    setErrors: (erro) => {
+      this.varControler.errors.push(erro);
+    },
+    errors: [],
+  };
+  parametros =[];
   constructor(
     private router: Router,
     private activated: ActivatedRoute,
     private service: RegrasService,
     private shared: SharedService,
+    private typeService: TiposService,
     private modal: ModalsServicesService,
-    private route: ActivatedRoute
+    private paramsService: ParametrosService
   ) {}
 
   ngOnInit() {
@@ -72,23 +82,23 @@ export class FormCreateRegraComponent implements OnInit {
         this.idObj = e['edit'];
       }
       if (this.edicao) {
-          const regra = this.route.snapshot.data[`regra`];
-          if (regra) {
-            this.regra = regra;
-            this.regraCopy = Object.assign({}, regra);
-            this.formulario.patchValue({
-              nome: this.regra.schemaregras.nome,
-              entrada: this.regra.schemaregras.entrada.type,
-              saida: this.regra.schemaregras.saida.type,
-            });
-            this.objetoEntrada = Object.assign(
-              {},
-              this.regra.schemaregras.entrada
-            );
-            this.objetoSaida = Object.assign({}, this.regra.schemaregras.saida);
-            this.verificarModelos(this.objetoEntrada);
-            this.verificarModelos(this.objetoSaida);
-          }
+        const regra = this.activated.snapshot.data[`regra`];
+        if (regra) {
+          this.regra = regra;
+          this.regraCopy = Object.assign({}, regra);
+          this.formulario.patchValue({
+            nome: this.regra.schemaregras.nome,
+            entrada: this.regra.schemaregras.entrada.type,
+            saida: this.regra.schemaregras.saida.type,
+          });
+          this.objetoEntrada = Object.assign(
+            {},
+            this.regra.schemaregras.entrada
+          );
+          this.objetoSaida = Object.assign({}, this.regra.schemaregras.saida);
+          this.verificarModelos(this.objetoEntrada);
+          this.verificarModelos(this.objetoSaida);
+        }
       }
     });
     this.shared.getOnePastaRegras(this.nomePasta).subscribe((pasta) => {
@@ -97,39 +107,69 @@ export class FormCreateRegraComponent implements OnInit {
         this.pasta = pasta;
       }
     });
+    this.formulario.controls.nome.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(200),
+        filter((valor) => valor && valor.length > 0)
+      )
+      .subscribe((valor) => this.verificarNome(valor));
   }
-  async save() {
-    const fixas = [];
+  async salvarIr() {
+    const schema = await this.saveRegra();
+    this.irRegra(schema);
+  }
+  async EditarIr() {
+    this.editRegra();
+    this.irRegra(this.regra);
+  }
+  async salvar() {
+    this.saveRegra();
+    this.modal.createToast(`success`, `Regra Salva com sucesso`);
+  }
+  async editar() {
+    this.editRegra();
+    this.modal.createToast(`success`, `Regra Salva com sucesso`);
+  }
+  async saveRegra() {
     const idregra = `${
       this.nomePasta
     }.${this.formulario.value.nome.trim().replace(/ /g, '.').toLowerCase()}`;
-    if (!this.verificarNome(idregra)) {
-      this.formulario.value.variaveisLocal = [];
-      this.formulario.value.variaveis = [];
-      this.formulario.value.itens = [];
-      this.formulario.value.entrada = Object.assign({}, this.objetoEntrada);
-      this.formulario.value.saida = Object.assign({}, this.objetoSaida);
-      this.formulario.value.variaveis.push(
-        this.formulario.value.entrada,
-        this.formulario.value.saida
+    this.formulario.value.variaveisLocal = [];
+    this.formulario.value.variaveis = [];
+    this.formulario.value.itens = [];
+    this.formulario.value.entrada = Object.assign({}, this.objetoEntrada);
+    this.formulario.value.saida = Object.assign({}, this.objetoSaida);
+    this.formulario.value.variaveis.push(
+      this.formulario.value.entrada,
+      this.formulario.value.saida
+    );
+    this.formulario.value.pasta = this.nomePasta;
+    this.formulario.value.parametros = this.paramsService.setParametros();
+    const schema = { idregra: idregra, schemaregras: {} };
+    schema.schemaregras = this.formulario.value;
+    this.service.salvarRegra(schema);
+    return schema;
+  }
+  irRegra(schema) {
+    this.service.id = 0;
+    this.service.setObjetoRegra(schema);
+    if (this.edicao) {
+      this.router.navigate(
+        [{ outlets: { primary: [`regras`, `edit`, this.idObj], dash: null } }],
+        { replaceUrl: true, fragment: `top` }
       );
-      this.formulario.value.pasta = this.nomePasta;
-      const schema = { idregra: idregra, schemaregras: {} };
-      schema.schemaregras = this.formulario.value;
-      this.service.id = 0;
-      this.service.setObjetoRegra(schema);
+    } else {
       this.router.navigate(
         [{ outlets: { primary: [`regras`, `create`], dash: null } }],
-        { replaceUrl: true }
+        { replaceUrl: true, skipLocationChange: true, fragment: `top` }
       );
     }
   }
-  async edit() {
-    // this.regra.idregra = `${
-    //   this.nomePasta
-    // }.${this.formulario.value.nome.trim().replace(/ /g, '.').toLowerCase()}`;
+  async editRegra() {
     const entrada = this.objetoEntrada;
     const saida = this.objetoSaida;
+    this.regra.schemaregras.parametros = this.paramsService.setParametros();
     this.regra.schemaregras.nome = this.formulario.value.nome;
     this.alterarFixas(
       this.regra.schemaregras,
@@ -143,16 +183,7 @@ export class FormCreateRegraComponent implements OnInit {
     );
     this.regra.schemaregras.entrada = entrada;
     this.regra.schemaregras.saida = saida;
-    this.service.id = 0;
-    this.service.setObjetoRegra(this.regra);
-    this.router.navigate([
-      {
-        outlets: {
-          primary: [`regras`, `edit`, this.regra.idregra],
-          dash: null,
-        },
-      },
-    ]);
+    this.service.editarRegra(this.regra);
   }
   excluir() {
     this.shared
@@ -210,7 +241,24 @@ export class FormCreateRegraComponent implements OnInit {
     }
   }
   verificarNome(nome) {
-    if (this.pasta.regras.find((regra) => regra == nome)) {
+    const id = `${this.nomePasta}.${nome
+      .trim()
+      .replace(/ /g, '.')
+      .toLowerCase()}`;
+    if (
+      this.pasta.regras.find((regra) => {
+        if (this.edicao) {
+          if (
+            (regra.nome == nome && nome != this.regraCopy.schemaregras.nome) ||
+            (regra.idregra == id && id != this.regraCopy.idregra)
+          ) {
+            return true;
+          }
+        } else if (regra.nome == nome || regra.idregra == id) {
+          return true;
+        }
+      })
+    ) {
       this.formulario.controls.nome.setErrors({ exist: true });
       return true;
     }
@@ -230,16 +278,23 @@ export class FormCreateRegraComponent implements OnInit {
       this.resetModelo(this.objetoSaida);
       this.objetoSaida[`tipomodelo`] = tipo;
       this.objetoSaida[`modelo`] = await this.getModelo(tipo);
+      const valor = await this.shared.jsonGenerate(this.objetoSaida[`modelo`]);
       if (this.objetoSaida[`tipoitems`]) {
-        this.objetoSaida[`valor`] = [{}];
+        this.objetoSaida[`valor`] = [valor];
       } else {
-        this.objetoSaida[`valor`] = {};
+        this.objetoSaida[`valor`] = valor;
       }
     } else {
       this.resetModelo(this.objetoEntrada);
       this.objetoEntrada[`tipomodelo`] = tipo;
       this.objetoEntrada[`modelo`] = await this.getModelo(tipo);
     }
+    this.varControler.errors.splice(
+      this.varControler.errors.indexOf(
+        this.varControler.errors.find((v) => v.atualizacao == onde)
+      ),
+      1
+    );
   }
   async getModelo(tipomodelo) {
     let path = tipomodelo;
@@ -248,54 +303,25 @@ export class FormCreateRegraComponent implements OnInit {
   }
   resetModelo(obj) {
     delete obj[`valor`];
-    if(obj.type != 'modelo'){
+    if (obj.type != 'modelo') {
       delete obj[`modelo`];
       delete obj[`tipomodelo`];
     }
-    if(obj.type != 'array'){
+    if (obj.type != 'array') {
       delete obj[`tipoitems`];
     }
   }
   verificacao(formulario) {
-    this.verificador = true;
-    if (
-      formulario.valid &&
-      this.objetoEntrada[`type`] &&
-      'valor' in this.objetoSaida
-    ) {
-      switch (this.objetoEntrada[`type`]) {
-        case `array`:
-          if (this.objetoEntrada[`tipoitems`]) {
-            this.verificador = false;
-            if (this.objetoEntrada[`tipoitems`] == `modelo`) {
-              if (!(`tipomodelo` in this.objetoEntrada)) {
-                this.verificador = true;
-              }
-            }
-          }
-          break;
-        case `modelo`:
-          if (`tipomodelo` in this.objetoEntrada) {
-            this.verificador = false;
-          } else {
-            this.verificador = true;
-          }
-        case `string`:
-        case `boolean`:
-        case `integer`:
-          this.verificador = false;
-          break;
-        default:
-          this.verificador = true;
-          break;
-      }
+    if ('valor' in this.objetoSaida) {
+      return this.typeService.verificaType(formulario, this.objetoEntrada);
+    } else {
+      return true;
     }
-    return this.verificador;
   }
   testar() {
     this.modal.createTest(this.idObj, this.regra.schemaregras.entrada);
   }
   verificarModelos(obj) {
-    this.service.verificarModelos(obj, this.formulario);
+    this.service.verificarModelos(obj, this.varControler);
   }
 }

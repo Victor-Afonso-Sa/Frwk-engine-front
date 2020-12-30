@@ -11,7 +11,11 @@ export class ModalAlertComponent implements OnInit {
   @Input() msg;
   constructor(private modalService: BsModalService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    setTimeout(() => {
+      this.onCloseModal();
+    }, 2000);
+  }
 
   onCloseModal() {
     this.modalService.hide();

@@ -35,7 +35,6 @@ export class ModuloComponent implements OnInit {
     private modals: ModalsServicesService
   ) {}
   ngOnInit(): void {
-    let valid = this.shared.isValidJSON(this.modelValues[`jsonModel`]);
     this.activeRouter.params.forEach((data) => {
       this.pastaId = data['pasta'];
       if (data['edit']) {
@@ -61,10 +60,10 @@ export class ModuloComponent implements OnInit {
   on(form) {
     form.value.idpasta = this.pastaValues['idpasta'];
     form.value.idModel = form.value.nomeModel
-      .toString()
-      .trim()
-      .replace(/ /g, '.')
-      .toLowerCase();
+    .toString()
+    .trim()
+    .replace(/ /g, '.')
+    .toLowerCase();
     if (this.verificarModel(form.value)) {
       this.nomeError = true;
     } else {
@@ -75,7 +74,11 @@ export class ModuloComponent implements OnInit {
   }
   onEdit(form) {
     form.value.idpasta = this.pastaValues['idpasta'];
-    form.value.idModel = form.value.nomeModel.toString().trim().replace(/ /g,".").toLowerCase();
+    form.value.idModel = form.value.nomeModel
+      .toString()
+      .trim()
+      .replace(/ /g, '.')
+      .toLowerCase();
     if (this.verificarModel(form.value) && !form.controls.nomeModel.pristine) {
       this.nomeError = true;
     } else {
@@ -92,7 +95,7 @@ export class ModuloComponent implements OnInit {
     this.formularioAux = form;
   }
   excluir(form) {
-    this.pastaValues[`schemapastas`][`models`].splice(this.index,1);
+    this.pastaValues[`schemapastas`][`models`].splice(this.index, 1);
     this.shared.atualizarPasta(this.pastaValues).subscribe();
     this.route.navigate(['model']);
   }
@@ -127,9 +130,9 @@ export class ModuloComponent implements OnInit {
           this.jsonError = true;
         })
         .catch((error) => {
-          if(error.message == `schema is undefined`){
+          if (error.message == `schema is undefined`) {
             this.msg = `Type indefinido ou faltando propriedades`;
-          }else{
+          } else {
             this.msg = error;
           }
           this.jsonError = false;

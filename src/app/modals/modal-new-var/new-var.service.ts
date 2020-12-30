@@ -1,4 +1,5 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
+import { ParametrosService } from 'src/app/parametros/parametros.service';
 import { SharedService } from 'src/app/shared.service';
 
 @Injectable({
@@ -6,26 +7,25 @@ import { SharedService } from 'src/app/shared.service';
 })
 export class NewVarService {
   @Output() variavel = new EventEmitter();
+  @Output() verificacao = new EventEmitter();
   @Output() modalClose = new EventEmitter();
-  constructor(private shared: SharedService) {}
+  constructor(private shared: SharedService,private paramsService:ParametrosService) {}
 
   async verificadorEval(variavel) {
-
     let expressao = '';
     let aux = {
-      type: variavel.type,
+      type: variavel.type==`modelo` ? variavel.tipomodelo : variavel.type,
     };
     if (variavel.type == `array`) {
       aux[`items`] = {};
-      if(variavel.tipoitems == `modelo`){
+      if (variavel.tipoitems == `modelo`) {
         aux[`items`].type = variavel.tipomodelo;
-      }else{
+      } else {
         aux[`items`].type = variavel.tipoitems;
       }
-
     }
-    if (variavel && variavel.type != 'modelo') {
-      const valid = await this.shared.jsonGenerate(aux);
+    const valid = await this.shared.jsonGenerate(aux);
+    if (variavel) {
       if (variavel.type == 'integer') {
         expressao += `var ${
           variavel.id ? variavel.id : variavel.nome
@@ -38,15 +38,7 @@ export class NewVarService {
         expressao += `var ${
           variavel.id ? variavel.id : variavel.nome
         } = ${valid} ;`;
-      }
-      // else if (variavel.type == 'array') {
-      //   console.log(valid);
-
-      //   expressao += `var ${
-      //     variavel.id ? variavel.id : variavel.nome
-      //   } = ${valid} ;`;
-      // }
-      else {
+      } else {
         const obj = JSON.stringify(valid);
         expressao += `var ${
           variavel.id ? variavel.id : variavel.nome
@@ -64,5 +56,13 @@ export class NewVarService {
     }
     return expressao;
   }
+  async iniciarParametros(){
+  let expressao = '';
+  const paramentros = this.paramsService.parametros;
+  for (let index = 0; index < paramentros.length; index++) {
+    const parms = paramentros[index];
+    expressao += await this.verificadorEval(parms);
+  }
+  return expressao;
+  }
 }
-
