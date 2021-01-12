@@ -1,5 +1,4 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
-
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { SharedService } from '../shared.service';
 import { ModalAlertComponent } from './modal-alert/modal-alert.component';
@@ -10,7 +9,10 @@ import { ModalRegraOptionComponent } from './modal-regra-option/modal-regra-opti
 import { ModalRegrasComponent } from './modal-regras/modal-regras.component';
 import { ModalVariaveisComponent } from './modal-variaveis/modal-variaveis.component';
 import { ModalExpressaoComponent } from './modalExpressao/modalExpressao.component';
+import { ModalTrilhaComponent } from './modalTrilha/modalTrilha.component';
+import { TrilhaService } from './modalTrilha/trilha.service';
 import { TestRegraComponent } from './test-regra/test-regra.component';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -20,7 +22,8 @@ export class ModalsServicesService {
 
   constructor(
     private modalService: BsModalService,
-    private shared: SharedService
+    private shared: SharedService,
+    private trilhaService: TrilhaService
   ) {}
 
   createPasta(pastas: Array<any>, mode: string, pasta?: object, nome?: string) {
@@ -76,12 +79,11 @@ export class ModalsServicesService {
     this.bsModalRef.content.msg = msg;
   }
   createToast(type: string, msg: string) {
-    const options =
-    {
+    const options = {
       class: 'modal-dialog-centered text-center text-uppercase',
       ignoreBackdropClick: false,
       id: 2,
-    }
+    };
     this.createAlert(type, msg, options);
   }
   createOption(onde, objeto) {
@@ -105,17 +107,24 @@ export class ModalsServicesService {
       this.bsModalRef.content.varControler = varControler;
     }
     const variaveisCopy = Object.assign([], objetoCompleto[`variaveis`]);
-    if (objetoCompleto[`variaveisfixas`]) {
-      variaveisCopy.push(
-        objetoCompleto[`variaveisfixas`].entrada,
-        objetoCompleto[`variaveisfixas`].saida
-      );
-    }
+
     this.bsModalRef.content.schema = objetoCompleto;
     if (objeto) {
       this.bsModalRef.content.objeto = objeto;
       this.bsModalRef.content.edit = Object.assign({}, objeto);
-      variaveisCopy.splice(variaveisCopy.indexOf(objeto), 1);
+      for (
+        let index = 0;
+        index < objetoCompleto[`variaveisLocal`].length;
+        index++
+      ) {
+        const element = objetoCompleto[`variaveisLocal`][index];
+        const indexExclusao = variaveisCopy.findIndex(
+          (exist) => exist.nome == element.nome
+        );
+        if (indexExclusao >= 0) {
+          variaveisCopy.splice(indexExclusao, 1);
+        }
+      }
     }
     this.createVarForTree(variaveisCopy).then(
       (value) => (this.bsModalRef.content.variaveis = value)
@@ -142,10 +151,6 @@ export class ModalsServicesService {
       id: 1,
     });
     let variaveisCopy = Object.assign([], variaveis);
-    // this.bsModalRef.content.onde = onde;
-    // if (key) {
-    //   this.bsModalRef.content.key = key;
-    // }
     if (only) {
       this.bsModalRef.content.only = only;
     }
@@ -183,6 +188,24 @@ export class ModalsServicesService {
     this.bsModalRef.content.idregra = idregra;
     this.bsModalRef.content.entradaVar = entradaVar;
   }
+  createTrilha(idregra) {
+    this.bsModalRef = this.modalService.show(ModalTrilhaComponent, {
+      class: 'modal-lg modal-dialog-centered ',
+      ignoreBackdropClick: false,
+      keyboard: false,
+      id: 1,
+    });
+    this.trilhaService.getTrilhas(idregra).subscribe(
+      (trilha: Array<any>) => {
+        this.bsModalRef.content.trilhas = trilha;
+      },
+      (e) => {},
+      () => {
+        this.bsModalRef.content.display = true;
+      }
+    );
+    this.bsModalRef.content.idregra = idregra;
+  }
   createModalRegras(onde, regra) {
     this.bsModalRef = this.modalService.show(ModalRegrasComponent, {
       class: 'modal-dialog-centered',
@@ -191,10 +214,10 @@ export class ModalsServicesService {
       id: 1,
     });
     this.bsModalRef.content.onde = Object.assign(onde);
-    regra.idregra = `Esta regra`;
+    regra.idregra = regra.idregra;
     this.bsModalRef.content.essa = regra;
   }
-   async createVarForTree(variaveis: Array<any>) {
+  async createVarForTree(variaveis: Array<any>) {
     let auxArray = [];
     let obj = { modelo: null, valor: {} };
     for (const item of variaveis) {
@@ -271,13 +294,15 @@ export class ModalsServicesService {
           }
         }
       }
-      (prop[`nome`] = `${prop.id} : ${prop.type}`), auxArray.push(prop);
+
+      prop[`nome`] = `${prop.id} : ${prop.type}`;
+      auxArray.push(prop);
     }
     return auxArray;
   }
   private async buscarModelo(path) {
     let aux;
-    path = path.replace(/\./,'&').split('&');
+    path = path.replace(/\./, '&').split('&');
     await this.shared.getModelos(path[0], path[1]).then((response) => {
       aux = response.properties;
     });

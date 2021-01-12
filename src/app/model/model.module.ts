@@ -1,13 +1,10 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { ModelRoutingModule } from './model-routing.module';
-import { ModelComponent } from './model/model.component';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { NgModule } from '@angular/core';
 import { AccordionModule } from 'ngx-bootstrap/accordion';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { ModelRoutingModule } from './model-routing.module';
+import { ModelComponent } from './modelos-sidebar/modelo-sidebar.component';
 
 @NgModule({
   declarations: [ModelComponent],
@@ -18,6 +15,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AccordionModule.forRoot(),
     ModalModule.forRoot(),
   ],
-  exports: [ModelComponent]
+  exports: [ModelComponent],
 })
-export class ModelModule { }
+export class ModelModule {}

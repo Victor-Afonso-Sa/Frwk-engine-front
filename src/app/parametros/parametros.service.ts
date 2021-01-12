@@ -30,22 +30,17 @@ export class ParametrosService {
   deleteParametros(idParams) {
     return this.http.delete(this.URI, { params: { id: idParams } });
   }
-  setParametros() {
-    this.parametros =[];
-    this.getParametros().subscribe((pastaParams: Array<any>) => {
-      for (let index = 0; index < pastaParams.length; index++) {
-        const element = JSON.parse(pastaParams[index][`parametros`]);
-        for (let index = 0; index < element.length; index++) {
-          const param = element[index];
-          param.nome = param.id;
-          this.parametros.push(param);
-        }
+  setParametros(pastaParams) {
+    const parametros = [];
+    for (let index = 0; index < pastaParams.length; index++) {
+      const element = JSON.parse(pastaParams[index][`parametros`]);
+      for (let index = 0; index < element.length; index++) {
+        const param = element[index];
+        param.nome = param.id;
+        param.valor = JSON.parse(param.valor);
+        parametros.push(param);
       }
-    });
-    return this.parametros;
-  }
-  async getParametrosModif() {
-    const result = await this.modalsSevice.createVarForTree(this.parametros);
-    return result;
+    }
+    return parametros;
   }
 }

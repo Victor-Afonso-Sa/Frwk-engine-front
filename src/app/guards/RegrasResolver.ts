@@ -5,10 +5,10 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
-import { EMPTY, Observable, of } from 'rxjs';
-import { RegrasService } from '../regras/regras.service';
+import { EMPTY, Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { Regra } from '../regras/regra';
-import { catchError, filter, map } from 'rxjs/operators';
+import { RegrasService } from '../regras/regras.service';
 
 @Injectable({ providedIn: 'root' })
 export class RegrasResolver implements Resolve<Regra> {

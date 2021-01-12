@@ -7,23 +7,19 @@ import {
   Injector,
   Output,
 } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
 import { finalize, map, switchMap, take } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { NewVarService } from '../modals/modal-new-var/new-var.service';
+import { SharedService } from '../shared.service';
 import { AtribuicaoComponent } from './create-regra/atribuicao/atribuicao.component';
 import { BreakComponent } from './create-regra/break/break.component';
-import { DynamicComponentComponent } from './create-regra/dynamic-component/dynamic-component.component';
 import { EnquantoComponent } from './create-regra/enquanto/enquanto.component';
+import { ExecutarRegraComponent } from './create-regra/executar-regra/executar-regra.component';
 import { CondicaoComponent } from './create-regra/if/condicao.component';
 import { IfComponent } from './create-regra/if/if/if.component';
 import { IteracaoComponent } from './create-regra/iteracao/iteracao.component';
-import { RetornarComponent } from './create-regra/retornar/retornar.component';
-import { ExecutarRegraComponent } from './create-regra/executar-regra/executar-regra.component';
-import { SharedService } from '../shared.service';
 import { ManipulacaoArrayComponent } from './create-regra/manipulacao-array/manipulacao-array.component';
-import { NewVarService } from '../modals/modal-new-var/new-var.service';
-import { variable } from '@angular/compiler/src/output/output_ast';
-import { isUndefined } from 'util';
-import { environment } from 'src/environments/environment';
+import { RetornarComponent } from './create-regra/retornar/retornar.component';
 
 @Injectable({
   providedIn: 'root',
@@ -162,6 +158,7 @@ export class RegrasService {
       }
       this.setVariaveisEscopo(element, valor, true);
     });
+    this.varService.verificacao.emit(true);
   }
   editarVariaveisEscopo(obj, valor, antigo, callback?: boolean) {
     if (!callback) {
@@ -274,9 +271,6 @@ export class RegrasService {
   setComponente(tipo) {
     let retorno;
     switch (tipo) {
-      case `escopo`:
-        retorno = DynamicComponentComponent;
-        break;
       case `atribuicao`:
         retorno = AtribuicaoComponent;
         break;

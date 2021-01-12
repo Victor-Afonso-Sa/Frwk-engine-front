@@ -7,7 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { filter, first, repeat } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { NewVarService } from 'src/app/modals/modal-new-var/new-var.service';
 import { RegrasService } from '../regras.service';
 

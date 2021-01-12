@@ -1,14 +1,10 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { EMPTY, pipe } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import {
-  debounceTime,
   distinctUntilChanged,
   filter,
   first,
-  last,
   map,
-  retry,
   switchMap,
   take,
   tap,
@@ -16,7 +12,6 @@ import {
 import { ConfirmService } from 'src/app/modals/modal-confirm/confirm.service';
 import { ModalsServicesService } from 'src/app/modals/modals-services.service';
 import { SharedService } from 'src/app/shared.service';
-import { FormRegraService } from '../form-create-regra/form-regra.service';
 import { RegrasService } from '../regras.service';
 
 @Component({
@@ -77,13 +72,16 @@ export class RegrasSidebarComponent implements OnInit {
       );
   }
   createRegra(pasta) {
-    this.router.navigate([{ outlets: { dash: `form/${pasta.idpasta}` } }],{skipLocationChange: true});
+    this.router.navigate([{ outlets: { dash: `form/${pasta.idpasta}` } }], {
+      skipLocationChange: true,
+    });
   }
   edit(pasta, item) {
     item = item.trim().replace(/ /g, '.').toLowerCase();
-    this.router.navigate([
-      { outlets: { dash: `form/${pasta.idpasta}/${item}` } },
-    ],{skipLocationChange: true});
+    this.router.navigate(
+      [{ outlets: { dash: `form/${pasta.idpasta}/${item}` } }],
+      { skipLocationChange: true }
+    );
   }
 
   createPasta() {

@@ -1,11 +1,10 @@
-import { AfterContentInit, Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { SharedService } from 'src/app/shared.service';
-import { autosize } from 'autosize';
-import { NewVarService } from './new-var.service';
-import { FormControl, FormGroup } from '@angular/forms';
+import { take } from 'rxjs/operators';
 import { RegrasService } from 'src/app/regras/regras.service';
-import { distinctUntilChanged, take } from 'rxjs/operators';
+import { SharedService } from 'src/app/shared.service';
+import { environment } from 'src/environments/environment';
+import { NewVarService } from './new-var.service';
 
 @Component({
   selector: 'app-modal-new-var',
@@ -59,9 +58,7 @@ export class ModalNewVarComponent implements OnInit {
 
   save(formulario) {
     this.objeto[`nome`] = formulario.value.nome;
-    this.objeto[`valor`] = this.objeto[`valor`]
-      ? this.objeto[`valor`]
-      : null;
+    this.objeto[`valor`] = this.objeto[`valor`] ? this.objeto[`valor`] : null;
     if (this.objeto[`modelo`] && this.objeto[`tipomodelo`]) {
       this.objeto[`tipomodelo`] = this.objeto[`tipomodelo`];
       this.objeto[`modelo`] = this.objeto[`modelo`];
@@ -78,9 +75,9 @@ export class ModalNewVarComponent implements OnInit {
     }
     this.modalService.hide();
   }
-  verificarModelos(){
+  verificarModelos() {
     for (const iterator of this.schema[`variaveisLocal`]) {
-      this.varControler.errors = []
+      this.varControler.errors = [];
       this.regrasService.verificarModelos(iterator, this.varControler);
     }
   }
@@ -89,11 +86,17 @@ export class ModalNewVarComponent implements OnInit {
   }
   verificarNome(f) {
     let nome: string = f.controls.nome.value;
+    let reserv = environment.palavrasReservadas.find(
+      (palavra) => palavra == nome
+    );
     let valor = this.schema.variaveis.find(
       (exist) => exist.nome == nome && exist.nome != this.objeto[`nome`]
     );
     if (valor) {
       f.controls.nome.setErrors({ exist: true });
+    }
+    if (reserv) {
+      f.controls.nome.setErrors({ reservado: true });
     }
   }
   tipoitems(type) {
@@ -113,7 +116,7 @@ export class ModalNewVarComponent implements OnInit {
     if (this.objeto[`tipoitems`] && type != `array`) {
       delete this.objeto[`tipoitems`];
     }
-    if(this.objeto[`tipomodelo`] && type != `modelo`){
+    if (this.objeto[`tipomodelo`] && type != `modelo`) {
       this.resetModelo();
     }
     this.objeto[`type`] = type;

@@ -1,8 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~bootstrap/dist/css/bootstrap.min.css";
 @import "~@circlon/angular-tree-component/css/angular-tree-component.css";
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+span {
+  cursor: pointer;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 .color-green {
-  color: #4BB543;
+  color: #4bb543;
 }
 .color-red {
   color: red;
@@ -133,32 +150,30 @@ iframe {
   font-size: medium;
   cursor: pointer;
 }
-.acc-100 li:hover:not(.mais,.liMais){
+.acc-100 li:hover:not(.mais, .liMais) {
   padding: 2%;
   color: #e9832b;
   -webkit-transform: scale(1);
   -ms-transform: scale(1);
   transform: scale(1);
 }
-.selected{
-  padding: 3% ;
+.selected {
+  padding: 3%;
   color: #e9832b;
   -webkit-transform: scale(1);
   -ms-transform: scale(1);
   transform: scale(1);
 }
-.mais{
-  border: #4BB543 0.2pt solid ;
+.mais {
+  border: #4bb543 0.2pt solid;
   border-radius: 4%;
   margin-top: 5px;
 }
-.mais-active, .mais:hover{
-  box-shadow:
-  1px 1px #4BB543,
-  2px 2px #4BB543,
-  3px 3px #4BB543;
--webkit-transform: translateX(-3px);
-transform: translateX(-3px);
+.mais-active,
+.mais:hover {
+  box-shadow: 1px 1px #4bb543, 2px 2px #4bb543, 3px 3px #4bb543;
+  -webkit-transform: translateX(-3px);
+  transform: translateX(-3px);
 }
 .sidebar-button {
   box-sizing: border-box;
@@ -211,6 +226,7 @@ tree-root div .node-content-wrapper {
   border-radius: 5px;
   transition: background-color 0.15s, box-shadow 0.15s;
   min-width: 150px;
+  text-align: center;
 }
 tree-root div .node-wrapper {
   display: flex;
@@ -331,15 +347,17 @@ tree-root .toggle-children {
     transform: translate(0, 0) rotateX(0) rotateY(360deg);
   }
 }
-.seta{
-  padding: .5%;
+.seta {
+  padding: 0.5%;
   border: #000 1pt solid;
   border-radius: 100%;
   cursor: pointer;
 }
-.seta:hover{
-color: white;
-background-color: #000;
-opacity: 0.9;
+.seta:hover {
+  color: white;
+  background-color: #000;
+  opacity: 0.9;
 }
-
+.pointer {
+  cursor: pointer;
+}

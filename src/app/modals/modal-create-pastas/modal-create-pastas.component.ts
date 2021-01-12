@@ -1,9 +1,13 @@
-import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
-import { take } from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  take,
+  tap,
+} from 'rxjs/operators';
 import { ParametrosService } from 'src/app/parametros/parametros.service';
 import { SharedService } from 'src/app/shared.service';
 
@@ -29,7 +33,25 @@ export class ModalCreatePastasComponent implements OnInit {
   errorMsg: string;
   click = false;
   @Input() indexPasta;
-  ngOnInit(): void {}
+  disable;
+  ngOnInit(): void {
+    this.nomePasta.valueChanges
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(200),
+        filter((valor) => valor && valor.length > 0),
+        tap((valor) => {
+          this.disable = false;
+          this.errorMsg = null;
+        })
+      )
+      .subscribe((value) => {
+        if (this.verificarExistencia(value)) {
+          this.disable = true;
+          this.errorMsg = 'Ja existe uma pasta com essa identificação...';
+        }
+      });
+  }
   hide() {
     if (this.editar) {
       this.nomePasta.reset(this.nome);
@@ -37,10 +59,7 @@ export class ModalCreatePastasComponent implements OnInit {
     this.modalService.hide();
   }
   criar() {
-    let control = this.verificarExistencia(this.nomePasta.value);
-    if (control == true) {
-      this.errorMsg = 'Ja existe uma pasta com essa identificação...';
-    } else if (this.mode == `modelo`) {
+    if (this.mode == `modelo`) {
       this.obj['nomePasta'] = this.nomePasta.value;
       this.obj['models'] = [];
       const id = this.nomePasta.value
@@ -96,10 +115,7 @@ export class ModalCreatePastasComponent implements OnInit {
     }
   }
   edit() {
-    let control = this.verificarExistencia(this.nomePasta.value);
-    if (control == true) {
-      this.errorMsg = 'Essa pasta ja existe...';
-    } else if (this.mode == `modelo`) {
+    if (this.mode == `modelo`) {
       this.pasta.schemapastas.nomePasta = this.nomePasta.value;
       this.shared.atualizarPasta(this.pasta).subscribe();
       this.modalService.hide(1);
@@ -137,7 +153,10 @@ export class ModalCreatePastasComponent implements OnInit {
     const id = value.toString().trim().replace(/ /g, '.').toLowerCase();
     let control = false;
     this.pastas.forEach((pasta) => {
-      if ((pasta.idpasta == id && id != this.pasta?.idpasta) || (pasta.nome == value && value != this.pasta?.nome)) {
+      if (
+        (pasta.idpasta == id && id != this.pasta?.idpasta) ||
+        (pasta.nome == value && value != this.pasta?.nome)
+      ) {
         control = true;
       }
     });

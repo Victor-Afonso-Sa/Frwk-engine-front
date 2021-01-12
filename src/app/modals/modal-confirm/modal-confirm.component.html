@@ -1,12 +1,25 @@
 <div class="modal-content">
-      <div class="modal-header d-flex justify-content-center"><h5>{{ title }}</h5>
-      </div>
-      <div class="modal-body ">
-        <h4 class="text-center">{{ msg }}</h4>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-danger px-4" (click)="onConfirm()">{{ confirm }}</button>
-        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal"  (click)="onDecline()">{{ decline }}</button>
-      </div>
-    </div>
-
+  <div class="modal-header d-flex justify-content-center">
+    <h5>{{ title }}</h5>
+  </div>
+  <div class="modal-body">
+    <h4 class="text-center">{{ msg }}</h4>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline-danger px-4"
+      (click)="onConfirm()"
+    >
+      {{ confirm }}
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      data-dismiss="modal"
+      (click)="onDecline()"
+    >
+      {{ decline }}
+    </button>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, map, take } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { ConfirmService } from 'src/app/modals/modal-confirm/confirm.service';
 import { ModalsServicesService } from 'src/app/modals/modals-services.service';
 import { SharedService } from 'src/app/shared.service';
@@ -13,6 +13,7 @@ import { ParametrosService } from '../parametros.service';
 })
 export class ParametrosSidebarComponent implements OnInit {
   parametros = [];
+  display = false;
   constructor(
     private modals: ModalsServicesService,
     private paramsService: ParametrosService,
@@ -24,11 +25,11 @@ export class ParametrosSidebarComponent implements OnInit {
 
   ngOnInit() {
     this.refresh();
-    this.paramsService.atualizar.pipe(filter(v=> v && v!=null)).subscribe(
-      v => this.refresh()
-    )
+    this.paramsService.atualizar
+      .pipe(filter((v) => v && v != null))
+      .subscribe((v) => this.refresh());
   }
-  refresh(){
+  refresh() {
     this.paramsService
       .getParametros()
       .pipe(
@@ -41,7 +42,13 @@ export class ParametrosSidebarComponent implements OnInit {
           return params;
         })
       )
-      .subscribe((params: Array<any>) => (this.parametros = params));
+      .subscribe(
+        (params: Array<any>) => (this.parametros = params),
+        () => {this.modals.createAlert('danger', "Servidor fora do ar")},
+        () => {
+          this.display = true;
+        }
+      );
   }
   createPasta() {
     this.modals.createPasta(this.parametros, `parametros`);
@@ -69,28 +76,30 @@ export class ParametrosSidebarComponent implements OnInit {
     this.modals.createPasta(this.parametros, `parametros`, pasta, pasta.nome);
   }
   createParametro(pasta) {
-    this.router.navigate([
-      {
-        outlets: {
-          dash: `form/${pasta.idpasta}`,
+    this.router.navigate(
+      [
+        {
+          outlets: {
+            dash: `form/${pasta.idpasta}`,
+          },
         },
-      },
-    ],
-    {relativeTo:this.active}
-    // {skipLocationChange: true }
-    )
+      ],
+      { relativeTo: this.active }
+      // {skipLocationChange: true }
+    );
   }
-  editParam(pasta,params){
-    this.router.navigate([
-      {
-        outlets: {
-          dash: `form/${pasta.idpasta}/${params.id}`,
+  editParam(pasta, params) {
+    this.router.navigate(
+      [
+        {
+          outlets: {
+            dash: `form/${pasta.idpasta}/${params.id}`,
+          },
         },
-      },
-    ],
-    {relativeTo:this.active}
-    // {skipLocationChange: true }
-    )
+      ],
+      { relativeTo: this.active }
+      // {skipLocationChange: true }
+    );
   }
   setClasse(id) {
     this.sharedService.setClasse(id);

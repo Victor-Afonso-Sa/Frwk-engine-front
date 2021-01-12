@@ -1,21 +1,16 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AccordionModule } from 'ngx-bootstrap/accordion';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { ModalsModule } from '../modals/modals.module';
+import { TiposModule } from '../tipos/tipos/tipos.module';
+import { ParametrosFormComponent } from './parametros-form/parametros-form.component';
 import { ParametrosRoutingModule } from './parametros-routing.module';
 import { ParametrosSidebarComponent } from './parametros-sidebar/parametros-sidebar.component';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { AccordionModule } from 'ngx-bootstrap/accordion';
-import { ParametrosFormComponent } from './parametros-form/parametros-form.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TiposModule } from '../tipos/tipos/tipos.module';
-import { ModalsModule } from '../modals/modals.module';
-
 
 @NgModule({
-  declarations: [
-    ParametrosSidebarComponent,
-    ParametrosFormComponent
-  ],
+  declarations: [ParametrosSidebarComponent, ParametrosFormComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -25,6 +20,6 @@ import { ModalsModule } from '../modals/modals.module';
     AccordionModule.forRoot(),
     TiposModule,
     ModalsModule,
-  ]
+  ],
 })
-export class ParametrosModule { }
+export class ParametrosModule {}

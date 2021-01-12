@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import {
   debounceTime,
   distinctUntilChanged,
   filter,
-  finalize,
   first,
   map,
   take,
@@ -17,7 +16,11 @@ import { EscopoClassComponent } from '../EscopoClass.component';
   styleUrls: ['../styleEscopo.css', './iteracao.component.scss'],
 })
 export class IteracaoComponent extends EscopoClassComponent {
-  como = new FormControl(this.objetoLocal['acao'] && this.objetoLocal['acao'].iterado ? this.objetoLocal['acao'].iterado : `item`);
+  como = new FormControl(
+    this.objetoLocal['acao'] && this.objetoLocal['acao'].iterado
+      ? this.objetoLocal['acao'].iterado
+      : `item`
+  );
   array;
   iterado;
   indice;
@@ -25,8 +28,8 @@ export class IteracaoComponent extends EscopoClassComponent {
     super.ngOnInit();
     this.como.valueChanges
       .pipe(
-        map(val => val.trim()),
-        filter((value) => value && value.length >= 1 && value != " "),
+        map((val) => val.trim()),
+        filter((value) => value && value.length >= 1 && value != ' '),
         distinctUntilChanged(),
         debounceTime(200)
       )
@@ -46,35 +49,45 @@ export class IteracaoComponent extends EscopoClassComponent {
   openVariaveis() {
     const array = this.setArrayIter();
     super.openVariaveis('array', array);
-    let varivel$ = this.variavelService.variavel.pipe(filter(v => v && v !== this.array && v.type == `array`),first(), distinctUntilChanged(), take(1)).subscribe((v) => {
+    let varivel$ = this.variavelService.variavel
+      .pipe(
+        filter((v) => v && v !== this.array && v.type == `array`),
+        first(),
+        distinctUntilChanged(),
+        take(1)
+      )
+      .subscribe((v) => {
         this.array = v;
         this.objetoLocal['acao'].array = this.array;
-        this.objetoLocal['acao'].indice = 'indice_'+this.array.id;
+        this.objetoLocal['acao'].indice = 'indice_' + this.array.id;
         this.objetoLocal['acao'].iterado = this.como.value;
         this.createVar();
-    });
+      });
   }
   createVar() {
-    if(!this.indice){
+    if (!this.indice) {
       this.indice = {
         nome: this.objetoLocal['acao'].indice,
         type: `integer`,
         valor: 0,
-        iterado: true
+        iterado: true,
       };
     }
     if (!this.iterado) {
-
       this.iterado = {
         nome: `item`,
         type: this.array.tipoitems,
-        iterado: true
+        iterado: true,
       };
-      if(this.array.tipoitems == `modelo`){
+      if (this.array.tipoitems == `modelo`) {
         this.iterado.type = this.array.tipomodelo;
         this.iterado.modelo = this.array.modelo;
       }
-      if( this.como.value && this.como.value.length >= 1 && this.como.value != " "){
+      if (
+        this.como.value &&
+        this.como.value.length >= 1 &&
+        this.como.value != ' '
+      ) {
         this.iterado.nome = this.como.value;
       }
       this.service.setVariaveisEscopo(this.objetoLocal, this.iterado, true);
@@ -89,7 +102,7 @@ export class IteracaoComponent extends EscopoClassComponent {
       const auxIndice = {
         nome: this.objetoLocal['acao'].indice,
         type: `integer`,
-        valor: 0
+        valor: 0,
       };
       this.service.editarVariaveisEscopo(
         this.objetoLocal,
@@ -113,12 +126,12 @@ export class IteracaoComponent extends EscopoClassComponent {
       this.como.setErrors({ exist: true });
     }
   }
-  setArrayIter(){
+  setArrayIter() {
     const aux = [];
     for (let index = 0; index < this.objetoLocal[`variaveis`].length; index++) {
       const element = this.objetoLocal[`variaveis`][index];
-      if(!element.iterado){
-        aux.push(element)
+      if (!element.iterado) {
+        aux.push(element);
       }
     }
     return aux;

@@ -1,13 +1,4 @@
-import {
-  AfterContentInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { map } from 'rxjs/operators';
-import { SharedService } from 'src/app/shared.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-tipos',
@@ -18,7 +9,7 @@ export class TiposComponent implements OnInit {
   @Input() title = '';
   @Input() objeto = { type: '' };
   @Input() formulario;
-  @Input() pastas ;
+  @Input() pastas;
   @Output() setArrayEmitter = new EventEmitter();
   @Output() setModeloEmitter = new EventEmitter();
   @Output() setTypeEmitter = new EventEmitter();
@@ -31,8 +22,7 @@ export class TiposComponent implements OnInit {
   controler = true;
   constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   setArray(value) {
     this.setArrayEmitter.emit(value);

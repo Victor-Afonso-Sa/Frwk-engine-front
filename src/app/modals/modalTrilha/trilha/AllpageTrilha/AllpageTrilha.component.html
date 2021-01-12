@@ -1,0 +1,8 @@
+<div class="container margin">
+  <app-trilha *ngIf="jsonExecucao;else elseTemplate"  [(jsonExecucao)]="jsonExecucao" [(display)]="display"></app-trilha>
+</div>
+<ng-template #elseTemplate>
+  <div *ngIf="error" class="alert alert-warning">
+    <h2 class="align-center">{{'Essa trilha não se encontra disponivel'}}</h2>
+  </div>
+</ng-template>

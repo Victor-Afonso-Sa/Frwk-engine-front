@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { distinctUntilChanged, filter, first, take } from 'rxjs/operators';
 import { EscopoClassComponent } from '../EscopoClass.component';
 
@@ -23,8 +23,8 @@ export class ExecutarRegraComponent extends EscopoClassComponent {
     );
   }
   openRegras() {
-    this.objetoLocal['acao'].regra = null;
-    this.modals.createModalRegras(this.objetoLocal['acao'], this.objeto);
+    this.objetoLocal['acao'].regra = '';
+    this.modals.createModalRegras(this.objetoLocal['acao'], this.service.objetoRegra);
   }
   openVariaveis() {
     super.openVariaveis(

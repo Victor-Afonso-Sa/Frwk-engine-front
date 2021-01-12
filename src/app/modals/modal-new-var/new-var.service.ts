@@ -33,7 +33,7 @@ export class NewVarService {
       } else if (variavel.type == 'string') {
         expressao += `var ${
           variavel.id ? variavel.id : variavel.nome
-        } = String("${valid}") ;`;
+        } = "${valid}" ;`;
       } else if (variavel.type == 'boolean') {
         expressao += `var ${
           variavel.id ? variavel.id : variavel.nome

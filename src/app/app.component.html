@@ -20,20 +20,20 @@
         class="title-nav nav-link"
         routerLinkActive="active"
         [routerLink]="[{ outlets: { primary: ['model'], dash: null } }]"
-        >Model</a
+        >{{ "Módulos" }}</a
       >
 
       <a
         class="title-nav nav-link"
         routerLinkActive="active"
         [routerLink]="[{ outlets: { dash: null, primary: ['regras'] } }]"
-        >Regra</a
+        >{{ "Regra" }}</a
       >
       <a
         class="title-nav nav-link"
         routerLinkActive="active"
         [routerLink]="[{ outlets: { dash: null, primary: ['parametros'] } }]"
-        >Parâmetros</a
+        >{{ "Parâmetros" }}</a
       >
     </div>
   </div>

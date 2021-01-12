@@ -1,21 +1,22 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY } from 'rxjs';
-import { take, tap } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { ConfirmService } from 'src/app/modals/modal-confirm/confirm.service';
 import { ModalsServicesService } from '../../modals/modals-services.service';
 import { SharedService } from '../../shared.service';
 
 @Component({
-  selector: 'app-model',
-  templateUrl: './model.component.html',
-  styleUrls: ['./model.component.scss'],
+  selector: 'app-modelo-sidebar',
+  templateUrl: './modelo-sidebar.component.html',
+  styleUrls: ['./modelo-sidebar.component.scss'],
 })
 export class ModelComponent implements OnInit {
   title;
   openModulo = false;
   pastas = [];
   modelos = [];
+  display = false;
   @Output() responseConfirm = new EventEmitter();
 
   constructor(
@@ -77,7 +78,12 @@ export class ModelComponent implements OnInit {
       if (resp) {
         if (this.pastas.indexOf(pasta) >= 0) {
           this.pastas.splice(this.pastas.indexOf(pasta), 1);
-          this.shared.deletePasta(pasta).subscribe(()=>{},(error) => { this.modalService.createAlert("danger",error.statusText)});
+          this.shared.deletePasta(pasta).subscribe(
+            () => {},
+            (error) => {
+              this.modalService.createAlert('danger', error.statusText);
+            }
+          );
         }
       }
     });
@@ -86,19 +92,30 @@ export class ModelComponent implements OnInit {
     this.shared
       .getPastas()
       .pipe(take(1))
-      .subscribe((data: Array<any>) =>
-        data
-          ? data.forEach((pasta) => {
-              let json = JSON.parse(pasta['schemapastas']);
-              pasta['schemapastas'] = json;
-              this.pastas = data;
-            })
-          : EMPTY,
-          (error) => { this.modalService.createAlert('danger', error.statusText)}
+      .subscribe(
+        (data: Array<any>) =>
+          data
+            ? data.forEach((pasta) => {
+                let json = JSON.parse(pasta['schemapastas']);
+                pasta['schemapastas'] = json;
+                this.pastas = data;
+              })
+            : EMPTY,
+        (error) => {
+          this.modalService.createAlert('danger', 'Servidor fora do ar');
+        },
+        () => {
+          this.display = true;
+        }
       );
   }
   editPasta(pasta, pastas) {
-    this.modalService.createPasta(pastas,`modelo`, pasta, pasta.schemapastas.nomePasta);
+    this.modalService.createPasta(
+      pastas,
+      `modelo`,
+      pasta,
+      pasta.schemapastas.nomePasta
+    );
   }
   setClasse(id) {
     this.shared.setClasse(id);

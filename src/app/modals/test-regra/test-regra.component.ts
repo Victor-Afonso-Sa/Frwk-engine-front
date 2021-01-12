@@ -22,6 +22,7 @@ export class TestRegraComponent implements OnInit {
 
   ngOnInit() {}
   testar() {
+    this.retorno = null;
     this.click = true;
     try {
       this.shared.executeTest(this.idregra, this.entrada.value).subscribe(

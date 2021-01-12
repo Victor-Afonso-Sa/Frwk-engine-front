@@ -22,21 +22,30 @@
             (ngModelChange)="verificarNome($event, formulario)"
           />
           <div
-          #validation
-          class="alert alert-danger"
-          *ngIf="
-            formulario?.controls?.nome?.errors?.pattern &&
-            !formulario?.controls?.nome?.pristine
-          "
-        >
-          Nome deve iniciar com letras, conter apenas letras e/ou números.
-        </div>
+            #validation
+            class="alert alert-danger"
+            *ngIf="
+              formulario?.controls?.nome?.errors?.pattern &&
+              !formulario?.controls?.nome?.pristine
+            "
+          >
+            Nome deve iniciar com letras, conter apenas letras e/ou números.
+          </div>
           <div
-        class="alert alert-danger"
-        *ngIf="formulario?.controls?.nome?.errors?.exist"
-      >
-        Essa identificação ja existe dentro desta pasta.
-      </div>
+            class="alert alert-danger"
+            *ngIf="formulario?.controls?.nome?.errors?.exist"
+          >
+            Essa identificação ja existe dentro desta pasta.
+          </div>
+          <div
+            class="alert alert-danger"
+            *ngIf="
+              formulario?.controls?.nome?.errors?.reservado &&
+              !formulario?.controls?.nome?.pristine
+            "
+          >
+            Esta palavra não pode ser utilizada.
+          </div>
         </div>
         <div class="col-md-6" *ngIf="edit && objeto['id']">
           <label class="control-label" for="id">Id:</label>
@@ -90,7 +99,11 @@
           class="btn btn-outline-success px-4 mx-4"
           (click)="clicou = true"
           type="submit"
-          [disabled]="!(formulario.valid && jsonError) || !(objeto['type'] && objeto['type'].length > 0) || clicou"
+          [disabled]="
+            !(formulario.valid && jsonError) ||
+            !(objeto['type'] && objeto['type'].length > 0) ||
+            clicou
+          "
         >
           Salvar
         </button>

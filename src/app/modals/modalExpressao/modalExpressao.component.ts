@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { IActionMapping } from '@circlon/angular-tree-component';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { ExpressaoService } from './expressao.service';
 
@@ -35,9 +34,9 @@ export class ModalExpressaoComponent implements OnInit {
   }
   save() {
     if (this.onde) {
-      if(this.key){
+      if (this.key) {
         this.onde[this.key] = this.objeto[`valor`];
-      }else{
+      } else {
         this.onde.expressao = this.objeto[`valor`];
       }
     } else {

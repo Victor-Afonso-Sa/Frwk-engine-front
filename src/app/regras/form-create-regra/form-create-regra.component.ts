@@ -1,27 +1,23 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
-  FormBuilder,
   FormControl,
   FormGroup,
-  Validators,
+  Validators
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { EventEmitter } from 'events';
 import {
   debounceTime,
   distinctUntilChanged,
   filter,
   map,
-  switchMap,
-  tap,
+  switchMap
 } from 'rxjs/operators';
 import { ModalsServicesService } from 'src/app/modals/modals-services.service';
 import { ParametrosService } from 'src/app/parametros/parametros.service';
-
 import { SharedService } from 'src/app/shared.service';
 import { TiposService } from 'src/app/tipos/tipos/tipos.service';
 import { RegrasService } from '../regras.service';
-import { FormRegraService } from './form-regra.service';
+
 
 @Component({
   selector: 'app-form-create-regra',
@@ -54,7 +50,7 @@ export class FormCreateRegraComponent implements OnInit {
     private shared: SharedService,
     private typeService: TiposService,
     private modal: ModalsServicesService,
-    private paramsService: ParametrosService
+    private paramsService: ParametrosService,
   ) {}
 
   ngOnInit() {
@@ -73,6 +69,7 @@ export class FormCreateRegraComponent implements OnInit {
         this.pastasModelos = data;
       }
     });
+
     this.activated.params.forEach((e) => {
       if (e[`pasta`]) {
         this.nomePasta = e[`pasta`];
@@ -145,7 +142,6 @@ export class FormCreateRegraComponent implements OnInit {
       this.formulario.value.saida
     );
     this.formulario.value.pasta = this.nomePasta;
-    this.formulario.value.parametros = this.paramsService.setParametros();
     const schema = { idregra: idregra, schemaregras: {} };
     schema.schemaregras = this.formulario.value;
     this.service.salvarRegra(schema);
@@ -169,7 +165,6 @@ export class FormCreateRegraComponent implements OnInit {
   async editRegra() {
     const entrada = this.objetoEntrada;
     const saida = this.objetoSaida;
-    this.regra.schemaregras.parametros = this.paramsService.setParametros();
     this.regra.schemaregras.nome = this.formulario.value.nome;
     this.alterarFixas(
       this.regra.schemaregras,
@@ -323,5 +318,8 @@ export class FormCreateRegraComponent implements OnInit {
   }
   verificarModelos(obj) {
     this.service.verificarModelos(obj, this.varControler);
+  }
+  openTrilhas(){
+    this.modal.createTrilha(this.idObj);
   }
 }

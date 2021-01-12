@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { EventEmitter, Injectable, Output } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { finalize, map, take, takeUntil } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 import * as dateFormat from 'dateformat';
+import { Subject } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
@@ -12,11 +12,13 @@ export class SharedService {
   excluirModelo = new Subject<any>();
   editarPath = {};
   modelEditar = {};
+  refresh = false;
+  pastaModelos;
   readonly URI = environment.BANCO;
   constructor(private http: HttpClient) {}
 
   getPastas() {
-    return this.http.get(this.URI + '/modelo');
+    return this.http.get(this.URI + '/modelo').pipe(take(1));
   }
   executeTest(id, entrada) {
     return this.http.post(`${this.URI}/run/${id}`, entrada);
@@ -104,7 +106,7 @@ export class SharedService {
     return value;
   }
   async buscarModelo(path) {
-    path = path.replace(/\./,'&').split('&');
+    path = path.replace(/\./, '&').split('&');
     let obj;
     obj = await this.getModelos(path[0], path[1]);
     return this.jsonGenerate(obj);
@@ -137,7 +139,7 @@ export class SharedService {
       JSON.parse(string);
       return [true, `Json valido`];
     } catch (e) {
-      return[false, e];
+      return [false, e];
     }
   }
   getPastaRegras() {
@@ -155,23 +157,35 @@ export class SharedService {
   deletePastaRegras(id) {
     return this.http.delete(this.URI + '/pastaregras', { params: { id: id } });
   }
-  setClasse(id) {
-    this.retirarSelected();
+  setClasse(id, className = `item`, select = `selected`) {
+    this.retirarSelected(className, select);
     const active = document.getElementById(id);
     if (active) {
-      active.className = `selected`;
+      active.className = select;
     }
   }
-  retirarSelected() {
-    const items = document.getElementsByClassName(`item`);
+  retirarSelected(className, select) {
+    const items = document.getElementsByClassName(className);
     for (let index = 0; index < items.length; index++) {
-      const atual = document.getElementsByClassName('selected');
+      const atual = document.getElementsByClassName(select);
       if (atual.length > 0) {
         for (let index = 0; index < atual.length; index++) {
           const element = atual[index];
-          element.className = element.className.replace('selected', 'item');
+          element.className = element.className.replace(select, className);
         }
       }
     }
+  }
+  setPastas() {
+    this.getPastas().subscribe((data: Array<any>) => {
+      if (data) {
+        data.forEach((pasta) => {
+          let json = JSON.parse(pasta['schemapastas']);
+          pasta['schemapastas'] = json;
+        });
+        this.pastaModelos = data;
+      }
+    });
+    return this.pastaModelos;
   }
 }

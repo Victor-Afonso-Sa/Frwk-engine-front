@@ -750,5 +750,70 @@
       "itens": []
     }
   ],
-  "idregra": "regra"
+  "idregra": "regra",
+
+  "test": {
+    "variaveis": [
+      { "nome": "entrada", "valor": "[1]" },
+      { "nome": "saida", "valor": "0" }
+    ],
+    "nome": "maior",
+    "entrada": "[1]",
+    "data": "06/01/2021 14:02",
+    "items": [
+      {
+        "variaveis": [
+          { "nome": "entrada", "valor": "[1]" },
+          { "nome": "saida", "valor": "0" }
+        ],
+        "nome": "Atribuição",
+        "tipo": "atribuicao",
+        "variavel": "saida",
+        "expressao": "0",
+        "valor": "0"
+      },
+      {
+        "tipo": "iteracao",
+        "array": "[1]",
+        "iteracoes": [
+          {
+            "variaveis": [
+              { "nome": "entrada", "valor": "[1]" },
+              { "nome": "saida", "valor": "0" },
+              { "nome": "item", "valor": "1" },
+              { "nome": "indice_entrada", "valor": "0" }
+            ],
+            "nome": "iteracao1",
+            "item": "1",
+            "indice": "0",
+            "items": [
+              {
+                "variaveis": [],
+                "nome": "if2",
+                "condicao": "se",
+                "expressao": "item > saida",
+                "items": [
+                  {
+                    "variaveis": [
+                      { "nome": "entrada", "valor": "[1]" },
+                      { "nome": "saida", "valor": "0" },
+                      { "nome": "item", "valor": "1" },
+                      { "nome": "indice_entrada", "valor": "0" }
+                    ],
+                    "nome": "Atribuição",
+                    "tipo": "atribuicao",
+                    "variavel": "saida",
+                    "expressao": "item",
+                    "valor": "1"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      { "variaveis": [], "nome": "Retorno", "tipo": "retorno", "retorno": "1" }
+    ],
+    "saida": "1"
+  }
 }

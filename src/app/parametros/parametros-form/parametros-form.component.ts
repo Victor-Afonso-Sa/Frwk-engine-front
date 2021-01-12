@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { filter, map, tap } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { SharedService } from 'src/app/shared.service';
+import { environment } from 'src/environments/environment';
 import { ParametrosService } from '../parametros.service';
 
 @Component({
@@ -159,6 +159,10 @@ export class ParametrosFormComponent implements OnInit {
     return await this.shared.getModelos(path[0], path[1]);
   }
   verificarNome(nome, form) {
+    let reserv = environment.palavrasReservadas.find( palavra => palavra == nome );
+    if (reserv) {
+      form.controls.nome.setErrors({ reservado: true });
+    }
     if (nome.length > 0) {
       const id = nome.trim().replace(/ /g, '.').toLowerCase();
       if (

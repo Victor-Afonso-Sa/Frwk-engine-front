@@ -1,12 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
-import { DeactivateIt } from 'src/app/guards/DeactivateIt';
-import { modalConfirm } from 'src/app/modals/modal-confirm/confirmIt';
 import { ModalsServicesService } from 'src/app/modals/modals-services.service';
-
 import { SharedService } from 'src/app/shared.service';
 
 @Component({
@@ -60,10 +56,10 @@ export class ModuloComponent implements OnInit {
   on(form) {
     form.value.idpasta = this.pastaValues['idpasta'];
     form.value.idModel = form.value.nomeModel
-    .toString()
-    .trim()
-    .replace(/ /g, '.')
-    .toLowerCase();
+      .toString()
+      .trim()
+      .replace(/ /g, '.')
+      .toLowerCase();
     if (this.verificarModel(form.value)) {
       this.nomeError = true;
     } else {

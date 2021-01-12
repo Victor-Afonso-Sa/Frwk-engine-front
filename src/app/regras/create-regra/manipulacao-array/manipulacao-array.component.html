@@ -15,7 +15,7 @@
   </div>
   <div class="row mt-3" *ngIf="objetoLocal['acao']">
     <div class="d-flex col-10">
-      <h3 class="">{{ 'Manipular array:' }}</h3>
+      <h3 class="">{{ "Manipular array:" }}</h3>
       <button
         type="button"
         class="btn btn-outline-dark mx-3"
@@ -23,8 +23,8 @@
       >
         {{
           this.objetoLocal["acao"] && this.objetoLocal["acao"].array
-            ? (this.objetoLocal["acao"].array.id)
-            : ("Selecione o array")
+            ? this.objetoLocal["acao"].array.id
+            : "Selecione o array"
         }}
       </button>
       <select
@@ -65,14 +65,20 @@
     </div>
   </div>
   <app-verificacao-var
-  *ngIf="objetoLocal && objetoLocal['variaveis'] && objetoLocal['acao'] && objetoLocal['acao']['array'] && this.objetoLocal['acao']['expressao']"
-  [(variaveisArray)]="objetoLocal['variaveis']"
-  [(variavel)]="objetoLocal['acao']['array']"
-  [(errorControl)]="errorControl"
-  [(tootltipErro)]="tootltipErro"
-  [(expressao)]="this.objetoLocal['acao']['expressao']"
-  (expressaoEmitter)="evaluate($event[0],$event[1])"
-  [only]="'array'"
+    *ngIf="
+      objetoLocal &&
+      objetoLocal['variaveis'] &&
+      objetoLocal['acao'] &&
+      objetoLocal['acao']['array'] &&
+      this.objetoLocal['acao']['expressao']
+    "
+    [(variaveisArray)]="objetoLocal['variaveis']"
+    [(variavel)]="objetoLocal['acao']['array']"
+    [(errorControl)]="errorControl"
+    [(tootltipErro)]="tootltipErro"
+    [(expressao)]="this.objetoLocal['acao']['expressao']"
+    (expressaoEmitter)="evaluate($event[0], $event[1])"
+    [only]="'array'"
   >
   </app-verificacao-var>
   <div class="d-flex justify-content-center">

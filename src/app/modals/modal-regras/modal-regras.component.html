@@ -1,15 +1,23 @@
 <div class="d-flex justify-content-center">
   <h4 class="m-3">{{ "Regras:" }}</h4>
 </div>
-<div
-  class="d-flex justify-content-center mb-5"
-  *ngIf="regras &&  regras.length > 0; else elseTemplate"
->
+<h6 class="align-center mb-1">Esta:</h6>
+<div class="align-center">
+  <div *ngIf="arrayEssa.length > 0" class="caixa mb-3">
+    <tree-root [nodes]="arrayEssa" [options]="options"></tree-root>
+  </div>
+</div>
+<h6 class="align-center mb-1">Regras cadastradas:</h6>
+<div class="align-center">
+  <div
+    class="caixa mb-5"
+    *ngIf="regras && regras.length > 0; else elseTemplate"
+  >
     <tree-root [nodes]="regras" [options]="options"></tree-root>
+  </div>
 </div>
 <ng-template #elseTemplate>
   <div class="alert alert-warning mx-auto text-center" role="alert">
     {{ "Nenhuma regra cadastrada!" }}
   </div>
 </ng-template>
-

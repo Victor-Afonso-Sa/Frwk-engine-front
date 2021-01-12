@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { RegrasResolver } from '../guards/RegrasResolver';
 import { CreateRegraComponent } from './create-regra/create-regra.component';
 import { FormCreateRegraComponent } from './form-create-regra/form-create-regra.component';
 import { RegrasSidebarComponent } from './regras-sidebar/regras-sidebar.component';
-import { RegrasResolver } from '../guards/RegrasResolver';
 
 const routes: Routes = [
   { path: '', component: RegrasSidebarComponent },

@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { distinctUntilChanged, first, take } from 'rxjs/operators';
 import { EscopoClassComponent } from '../../EscopoClass.component';
 
 @Component({
@@ -11,8 +9,8 @@ import { EscopoClassComponent } from '../../EscopoClass.component';
 export class IfComponent extends EscopoClassComponent implements OnInit {
   hide = true;
   ngOnInit() {
-    this.service.buttonHide.subscribe(d =>{
-      if(d >= 0){
+    this.service.buttonHide.subscribe((d) => {
+      if (d >= 0) {
         this.hide = true;
       }
     });

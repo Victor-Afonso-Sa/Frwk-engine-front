@@ -1,14 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-
+import { IActionMapping } from '@circlon/angular-tree-component';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { NewVarService } from '../modal-new-var/new-var.service';
-import {
-  TREE_ACTIONS,
-  IActionMapping,
-  ITreeOptions,
-} from '@circlon/angular-tree-component';
-import { ParametrosService } from 'src/app/parametros/parametros.service';
-import { ModalsServicesService } from '../modals-services.service';
 
 @Component({
   selector: 'app-modal-variaveis',
@@ -19,7 +12,6 @@ export class ModalVariaveisComponent implements OnInit {
   constructor(
     private varService: NewVarService,
     private service: BsModalService,
-    private paramsService: ParametrosService,
   ) {}
   @Input() variaveis: Array<any>;
   @Input() only;
@@ -36,12 +28,8 @@ export class ModalVariaveisComponent implements OnInit {
     displayField: 'nome',
     actionMapping: this.actionMapping,
   };
-  ngOnInit(): void {
-    this.paramsService.getParametrosModif().then(
-      params => this.parametros = params
-    )
-  }
-    setKeys(item) {
+  ngOnInit(): void {}
+  setKeys(item) {
     if (Object.keys(item).length >= 0) {
       return true;
     } else {
@@ -52,19 +40,19 @@ export class ModalVariaveisComponent implements OnInit {
     return JSON.parse(value);
   }
   setVar(value) {
-    if(this.only){
-      if(value.type == this.only){
+    if (this.only) {
+      if (value.type == this.only) {
         this.varService.variavel.emit(value);
         this.service.hide();
-      }else{
+      } else {
         this.error = true;
       }
-    }else{
+    } else {
       this.varService.variavel.emit(value);
       this.service.hide();
     }
   }
-  hide(){
+  hide() {
     this.varService.variavel.emit(null);
     this.service.hide();
   }

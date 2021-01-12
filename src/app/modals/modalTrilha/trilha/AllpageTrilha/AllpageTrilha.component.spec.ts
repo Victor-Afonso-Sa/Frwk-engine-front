@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { ModelComponent } from './model.component';
+import { AllpageTrilhaComponent } from './AllpageTrilha.component';
 
-describe('ModelComponent', () => {
-  let component: ModelComponent;
-  let fixture: ComponentFixture<ModelComponent>;
+describe('AllpageTrilhaComponent', () => {
+  let component: AllpageTrilhaComponent;
+  let fixture: ComponentFixture<AllpageTrilhaComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ModelComponent ]
+      declarations: [ AllpageTrilhaComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ModelComponent);
+    fixture = TestBed.createComponent(AllpageTrilhaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

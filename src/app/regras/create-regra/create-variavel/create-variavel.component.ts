@@ -1,12 +1,10 @@
 import {
-  AfterViewInit,
   Component,
   Input,
   OnChanges,
   OnInit,
   SimpleChanges,
 } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { ModalsServicesService } from 'src/app/modals/modals-services.service';
 import { RegrasService } from '../../regras.service';
 

@@ -1,16 +1,5 @@
-import {
-  AfterContentInit,
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { send } from 'process';
-import { distinctUntilChanged, first, take } from 'rxjs/operators';
-import { DeactivateIt } from 'src/app/guards/DeactivateIt';
-import { NewVarService } from 'src/app/modals/modal-new-var/new-var.service';
-import { OptionService } from 'src/app/modals/modal-regra-option/option.service';
 import { ModalsServicesService } from 'src/app/modals/modals-services.service';
 import { RegrasService } from '../regras.service';
 

@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { IActionMapping } from '@circlon/angular-tree-component';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { RegrasService } from 'src/app/regras/regras.service';
-import { SharedService } from 'src/app/shared.service';
 
 @Component({
   selector: 'app-modal-regras',
@@ -13,17 +12,18 @@ export class ModalRegrasComponent implements OnInit {
   regras = [];
   onde;
   essa;
+  arrayEssa = [];
   actionMapping: IActionMapping = {
     mouse: {
       dblClick: (tree, node, $event) => {
         let aux = node.data;
         aux.schemaregras = JSON.parse(aux.schemaregras);
         const data = {
-          nome: aux.schemaregras.nome ,
-          idregra: aux.idregra ,
+          nome: aux.schemaregras.nome,
+          idregra: aux.idregra,
           entrada: aux.schemaregras.entrada,
           saida: aux.schemaregras.saida,
-        }
+        };
         this.setRegra(data);
       },
     },
@@ -32,16 +32,20 @@ export class ModalRegrasComponent implements OnInit {
     displayField: 'idregra',
     actionMapping: this.actionMapping,
   };
-  constructor(private serviceRegras: RegrasService,private bsmodalService: BsModalService) {}
+  constructor(
+    private serviceRegras: RegrasService,
+    private bsmodalService: BsModalService
+  ) {}
 
   ngOnInit() {
     this.serviceRegras.getRegras().subscribe((regras: Array<any>) => {
       if (regras) {
-        this.regras = [this.essa,...regras];
+        this.arrayEssa.push(this.essa);
+        this.regras = [...regras];
       }
     });
   }
-  setRegra(schemaregra){
+  setRegra(schemaregra) {
     this.onde.regra = schemaregra;
     this.bsmodalService.hide();
   }

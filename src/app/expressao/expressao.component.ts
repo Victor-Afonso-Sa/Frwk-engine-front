@@ -18,7 +18,8 @@ import {
 } from 'rxjs/operators';
 import { ParametrosService } from 'src/app/parametros/parametros.service';
 import { SharedService } from 'src/app/shared.service';
-import { NewVarService } from '../new-var.service';
+import { ModalsServicesService } from '../modals/modals-services.service';
+import { NewVarService } from '../modals/modal-new-var/new-var.service';
 
 @Component({
   selector: 'expressao',
@@ -55,7 +56,8 @@ export class ExpressaoComponent implements OnInit {
   constructor(
     private shared: SharedService,
     private varService: NewVarService,
-    private paramsService: ParametrosService
+    private paramsService: ParametrosService,
+    private modalsSevice: ModalsServicesService
   ) {}
 
   ngOnInit() {
@@ -74,39 +76,18 @@ export class ExpressaoComponent implements OnInit {
       .subscribe((valor) => {
         this.verificado = false;
         this.jsonError = true;
-        if (
-          this.objeto[`modelo`] ||
-          this.objeto[`type`] == `array` ||
-          this.objeto[`type`] == `modelo`
-        ) {
-          this.jsonTest(valor);
-        } else {
           this.verificarValor(valor);
-        }
       });
     this.varService.modalClose
       .pipe(take(1))
       .subscribe((close) =>
         this.edit ? (this.objeto[`valor`] = this.edit[`valor`]) : null
       );
-    this.paramsService
-      .getParametrosModif()
-      .then((params) => (this.parametros = params));
-  }
-  jsonTest(json) {
-    this.verificado = true;
-    const log = this.isValidJSON(json);
-    this.jsonError = log[0];
-    this.msg = log[1];
-    this.jsonEmitter.emit(this.jsonError);
-  }
-  isValidJSON(json) {
-    try {
-      this.msg = `VALIDO`;
-      return this.shared.isValidJSON(json);
-    } catch (e) {
-      this.msg = e;
-    }
+      this.paramsService.getParametros().subscribe((pastaParams: Array<any>) => {
+        this.modalsSevice.createVarForTree(this.paramsService.setParametros(pastaParams)).then(
+          params => this.parametros = params
+        );
+      });
   }
   async verificarValor(value) {
     try {
@@ -142,9 +123,9 @@ export class ExpressaoComponent implements OnInit {
 
   insertValue(add) {
     if (!this.objeto[`valor`]) {
-      this.objeto[`valor`] = `${add}`;
+      this.objeto[`valor`] = add;
     } else {
-      this.objeto[`valor`] += `${add}`;
+      this.objeto[`valor`] += add;
     }
   }
 }

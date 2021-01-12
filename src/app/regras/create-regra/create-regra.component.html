@@ -1,24 +1,32 @@
-<div class="container" *ngIf="objeto" >
-<div class="d-flex justify-content-center mt-custom">
-<h4 class="mb-1">{{ title }}</h4>
-</div>
-<app-create-variavel id="top" [(objetoLocal)]="objeto.schemaregras"></app-create-variavel>
-<div *ngIf="display; else loading"></div>
-<div id="bodyRegra">
-
-</div>
-<button class="btn btn-outline-dark " *ngIf="objeto" (click)="regra()">
-  <span class="material-icons my-1">
-  add
-  </span></button>
-<div class="d-flex justify-content-center mb-4 col-12">
-  <button class="btn btn-outline-dark px-4 mx-5" (click)="voltar()">Sair</button>
-  <button class="btn btn-outline-success px-4 mx-5" *ngIf="objeto"  (click)="edit ? editar() : salvar()">{{ "Salvar" }}</button>
-</div>
+<div class="container" *ngIf="objeto">
+  <div class="d-flex justify-content-center mt-custom">
+    <h4 class="mb-1">{{ title }}</h4>
+  </div>
+  <app-create-variavel
+    id="top"
+    [(objetoLocal)]="objeto.schemaregras"
+  ></app-create-variavel>
+  <div *ngIf="display; else loading"></div>
+  <div id="bodyRegra"></div>
+  <button class="btn btn-outline-dark" *ngIf="objeto" (click)="regra()">
+    <span class="material-icons my-1"> add </span>
+  </button>
+  <div class="d-flex justify-content-center mb-4 col-12">
+    <button class="btn btn-outline-dark px-4 mx-5" (click)="voltar()">
+      Sair
+    </button>
+    <button
+      class="btn btn-outline-success px-4 mx-5"
+      *ngIf="objeto"
+      (click)="edit ? editar() : salvar()"
+    >
+      {{ "Salvar" }}
+    </button>
+  </div>
 </div>
 
 <ng-template #loading>
   <div class="d-flex justify-content-center col-12 mt-5">
-    <span class="loader "></span>
+    <span class="loader"></span>
   </div>
 </ng-template>

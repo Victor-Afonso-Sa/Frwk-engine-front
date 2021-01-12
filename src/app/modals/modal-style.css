@@ -1,102 +1,126 @@
-.modal-title{
+.modal-title {
   display: block;
   line-height: 1.2;
   text-align: center;
   padding-bottom: 5px;
 }
-.bg-black{
+.bg-black {
   background-color: black;
 }
-.group 			  {
-  position:relative;
-  margin-bottom:45px;
+.group {
+  position: relative;
+  margin-bottom: 45px;
 }
-input 				{
-  font-size:18px;
-  padding:10px 10px 10px 5px;
-  display:block;
-  width:300px;
-  border:none;
-  border-bottom:1px solid #757575;
+input {
+  font-size: 18px;
+  padding: 10px 10px 10px 5px;
+  display: block;
+  width: 300px;
+  border: none;
+  border-bottom: 1px solid #757575;
 }
-input:focus 		{ outline:none; }
+input:focus {
+  outline: none;
+}
 
 /* LABEL ======================================= */
-.label 				 {
-  color:#999;
-  font-size:18px;
-  font-weight:normal;
-  position:absolute;
-  pointer-events:none;
-  left:5px;
-  top:10px;
-  transition:0.2s ease all;
-  -moz-transition:0.2s ease all;
-  -webkit-transition:0.2s ease all;
+.label {
+  color: #999;
+  font-size: 18px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
 }
 
 /* active state */
-input:focus ~ label, input:valid ~ label 		{
-  top:-20px;
-  font-size:14px;
-  color:#000;
+input:focus ~ label,
+input:valid ~ label {
+  top: -20px;
+  font-size: 14px;
+  color: #000;
 }
 
 /* BOTTOM BARS ================================= */
-.bar 	{ position:relative; display:block; width:300px; }
-.bar:before, .bar:after 	{
-  content:'';
-  height:2px;
-  width:0;
-  bottom:1px;
-  position:absolute;
-  background:#000;
-  transition:0.2s ease all;
-  -moz-transition:0.2s ease all;
-  -webkit-transition:0.2s ease all;
+.bar {
+  position: relative;
+  display: block;
+  width: 300px;
+}
+.bar:before,
+.bar:after {
+  content: "";
+  height: 2px;
+  width: 0;
+  bottom: 1px;
+  position: absolute;
+  background: #000;
+  transition: 0.2s ease all;
+  -moz-transition: 0.2s ease all;
+  -webkit-transition: 0.2s ease all;
 }
 .bar:before {
-  left:50%;
+  left: 50%;
 }
 .bar:after {
-  right:50%;
+  right: 50%;
 }
 
 /* active state */
-input:focus ~ .bar:before, input:focus ~ .bar:after {
-  width:50%;
+input:focus ~ .bar:before,
+input:focus ~ .bar:after {
+  width: 50%;
 }
 
 /* HIGHLIGHTER ================================== */
 .highlight {
-  position:absolute;
-  height:60%;
-  width:100px;
-  top:25%;
-  left:0;
-  pointer-events:none;
-  opacity:0.5;
+  position: absolute;
+  height: 60%;
+  width: 100px;
+  top: 25%;
+  left: 0;
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 /* active state */
 input:focus ~ .highlight {
-  -webkit-animation:inputHighlighter 0.3s ease;
-  -moz-animation:inputHighlighter 0.3s ease;
-  animation:inputHighlighter 0.3s ease;
+  -webkit-animation: inputHighlighter 0.3s ease;
+  -moz-animation: inputHighlighter 0.3s ease;
+  animation: inputHighlighter 0.3s ease;
 }
 
 /* ANIMATIONS ================ */
 @-webkit-keyframes inputHighlighter {
-	from { background:#000; }
-  to 	{ width:0; background:transparent; }
+  from {
+    background: #000;
+  }
+  to {
+    width: 0;
+    background: transparent;
+  }
 }
 @-moz-keyframes inputHighlighter {
-	from { background:#000; }
-  to 	{ width:0; background:transparent; }
+  from {
+    background: #000;
+  }
+  to {
+    width: 0;
+    background: transparent;
+  }
 }
 @keyframes inputHighlighter {
-	from { background:#000; }
-  to 	{ width:0; background:transparent; }
+  from {
+    background: #000;
+  }
+  to {
+    width: 0;
+    background: transparent;
+  }
 }
 .button-criar {
   background: none;
@@ -109,42 +133,44 @@ input:focus ~ .highlight {
   font-weight: 700;
   position: relative;
   vertical-align: middle;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
 }
-.button-criar::before, button::after {
+.button-criar::before,
+button::after {
   box-sizing: inherit;
-  content: '';
+  content: "";
   position: absolute;
   width: 100%;
   height: 100%;
-
 }
 .center:hover {
   color: #000;
 }
-.center::before, .center::after {
+.center::before,
+.center::after {
   top: 0;
   left: 0;
   height: 100%;
   width: 100%;
   -webkit-transform-origin: center;
-          transform-origin: center;
+  transform-origin: center;
 }
 .center::before {
   border-top: 2px solid #000;
   border-bottom: 2px solid #000;
   -webkit-transform: scale3d(0, 1, 1);
-          transform: scale3d(0, 1, 1);
+  transform: scale3d(0, 1, 1);
 }
 .center::after {
   border-left: 2px solid #000;
   border-right: 2px solid #000;
   -webkit-transform: scale3d(1, 0, 1);
-          transform: scale3d(1, 0, 1);
+  transform: scale3d(1, 0, 1);
 }
-.center:hover::before, .center:hover::after {
+.center:hover::before,
+.center:hover::after {
   -webkit-transform: scale3d(1, 1, 1);
-          transform: scale3d(1, 1, 1);
+  transform: scale3d(1, 1, 1);
   -webkit-transition: -webkit-transform 0.5s;
   transition: -webkit-transform 0.5s;
   transition: transform 0.5s;

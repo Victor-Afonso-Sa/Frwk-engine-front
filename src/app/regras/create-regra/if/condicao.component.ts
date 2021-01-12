@@ -1,30 +1,32 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  first,
-  take,
-} from 'rxjs/operators';
+import { AfterViewInit, Component, Input } from '@angular/core';
 import { EscopoClassComponent } from '../EscopoClass.component';
-import { IfComponent } from './if/if.component';
 
 @Component({
   selector: 'app-condicao',
   templateUrl: './condicao.component.html',
   styleUrls: ['../styleEscopo.css', './condicao.component.scss'],
 })
-export class CondicaoComponent extends EscopoClassComponent implements AfterViewInit {
+export class CondicaoComponent
+  extends EscopoClassComponent
+  implements AfterViewInit {
   @Input() variaveis;
-  variavel = {type: `boolean`};
+  variavel = { type: `boolean` };
   aux;
 
   openModalExpressao() {
     const obj = {
       condicoes: true,
       type: 'boolean',
-      valor: this.objetoLocal[`acao`] && this.objetoLocal[`acao`].expressao ? this.objetoLocal[`acao`].expressao : ``,
+      valor:
+        this.objetoLocal[`acao`] && this.objetoLocal[`acao`].expressao
+          ? this.objetoLocal[`acao`].expressao
+          : ``,
     };
-    this.modals.modalExpressao(this.objeto[`variaveisescopo`], obj, this.objetoLocal[`acao`]);
+    this.modals.modalExpressao(
+      this.objeto[`variaveisescopo`],
+      obj,
+      this.objetoLocal[`acao`]
+    );
   }
   title() {
     if (this.tipo == `se`) {
@@ -35,10 +37,10 @@ export class CondicaoComponent extends EscopoClassComponent implements AfterView
       return `Se não `;
     }
   }
-  confirmDelete(number){
+  confirmDelete(number) {
     super.confirmDelete(number);
-    if(this.tipo == `senao`){
-    this.service.buttonHide.emit(number);
+    if (this.tipo == `senao`) {
+      this.service.buttonHide.emit(number);
     }
   }
 }

@@ -1,0 +1,13 @@
+.sticky {
+  height: 100%;
+  margin-top: 0.3pt;
+  top: 50px;
+  position: sticky;
+}
+.borda {
+  height: inherit;
+  position: relative;
+  box-sizing: border-box;
+  border: 0.3pt dashed #7900df;
+}
+

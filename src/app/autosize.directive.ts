@@ -1,4 +1,4 @@
-import { Directive, ElementRef, OnInit, OnDestroy, Input } from '@angular/core';
+import { Directive, ElementRef, Input, OnDestroy, OnInit } from '@angular/core';
 import * as autosize from 'autosize';
 @Directive({
   selector: '[autosize]',

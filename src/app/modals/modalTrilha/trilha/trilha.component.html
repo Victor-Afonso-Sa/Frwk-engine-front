@@ -1,0 +1,587 @@
+<!--  -->
+<ng-container *ngIf="jsonExecucao && display; else loading">
+  <h5 class="align-center mt-3" *ngIf="jsonExecucao['nome']">
+    {{ jsonExecucao["nome"] }}
+  </h5>
+  <h6 class="align-center mt-2" *ngIf="jsonExecucao['data']">
+    {{ "Executado em: " + jsonExecucao["data"] }}
+    <h6 *ngIf="jsonExecucao['executor']" class="ml-2">
+      {{ " Por: " + jsonExecucao["executor"] }}
+    </h6>
+  </h6>
+  <div class="d-flex flex-column justify-content-center mt-3" id="trill">
+    <h5 class="align-center my-2">Inicio:</h5>
+    <!-- Variaveis gerais -->
+    <ng-container
+      *ngTemplateOutlet="variaveisTemplate; context: jsonExecucao"
+    ></ng-container>
+    <!-- Fim variaveis gerais -->
+    <ul *ngFor="let item of jsonExecucao['items']; index as i">
+      <ng-container *ngIf="{ $implicit: item }; let myContext">
+        <ng-container *ngTemplateOutlet="switchCase; context: myContext">
+        </ng-container>
+        <ng-container *ngIf="jsonExecucao['items'][i + 1]">
+          <ng-container *ngTemplateOutlet="seta"></ng-container>
+        </ng-container>
+      </ng-container>
+    </ul>
+  </div>
+</ng-container>
+<!-- Loading -->
+<ng-template #loading>
+  <div class="d-flex justify-content-center col-12 my-5">
+    <span class="loader my-3"></span>
+  </div>
+</ng-template>
+<!-- Fim Loading -->
+<!-- SwitchCase Items -->
+<ng-template #switchCase let-item>
+  <!-- Lista Items -->
+  <ng-container [ngSwitch]="item.tipo">
+    <!-- atribuicao -->
+    <li class="mt-2 py-3" *ngSwitchCase="'atribuicao'">
+      <ng-container *ngTemplateOutlet="atribuicao; context: item">
+      </ng-container>
+    </li>
+    <!-- Fim atribuicao -->
+
+    <!-- iteracao -->
+    <li class="mt-2 py-3" *ngSwitchCase="'iteracao'">
+      <h3 class="align-center">{{ item.nome }}</h3>
+      <ng-container *ngTemplateOutlet="iteracao; context: item"> </ng-container>
+    </li>
+    <!-- Fim iteracao -->
+
+    <!-- retorno -->
+    <li class="mt-2 py-3" *ngSwitchCase="'retorno'">
+      <ng-container *ngTemplateOutlet="retorno; context: item"> </ng-container>
+    </li>
+    <!-- Fim retorno-->
+
+    <!-- break -->
+    <li class="mt-2 py-3" *ngSwitchCase="'break'">
+      <div class="break">
+        <ng-container *ngTemplateOutlet="break; context: item"> </ng-container>
+      </div>
+    </li>
+    <!-- Fim break -->
+
+    <!-- enquanto -->
+    <li class="mt-2 py-3" *ngSwitchCase="'enquanto'">
+      <h3 class="align-center">{{ item.nome }}</h3>
+      <ng-container *ngTemplateOutlet="enquanto; context: item"> </ng-container>
+    </li>
+    <!-- Fim enquanto -->
+
+    <!-- executarRegra -->
+    <li class="mt-2 py-3" *ngSwitchCase="'executarRegra'">
+      <ng-container *ngTemplateOutlet="executarRegra; context: item">
+      </ng-container>
+    </li>
+    <!-- Fim executarRegra -->
+
+    <!-- IF -->
+    <li class="mt-2 py-3" *ngSwitchCase="'IF'">
+      <h3 class="align-center">{{ item.nome }}</h3>
+      <ng-container *ngTemplateOutlet="IfTemple; context: item"> </ng-container>
+    </li>
+    <!-- Fim if -->
+
+    <!-- manipularArray -->
+    <li class="mt-2 py-3" *ngSwitchCase="'manipularArray'">
+      <ng-container
+        *ngTemplateOutlet="manipularArray; context: item"
+      ></ng-container>
+    </li>
+    <!-- Fim manipularArray -->
+
+    <!-- error -->
+    <li class="mt-2 py-3" *ngSwitchCase="'error'">
+      <div class="alert alert-danger">
+        <ng-container *ngTemplateOutlet="error; context: item"></ng-container>
+      </div>
+    </li>
+    <!-- Fim error -->
+  </ng-container>
+  <!-- Fim lista items -->
+</ng-template>
+<!-- Fim SwitchCase Items -->
+
+<!-- Atribuicao -->
+<ng-template
+  #atribuicao
+  let-variavel="variavel"
+  let-valor="valor"
+  let-expressao="expressao"
+>
+  <!-- Tooltip atribuicao -->
+  <ng-template #tooltipAtribuicao>
+    <h6 class="align-center">{{ "Atribuição" }}</h6>
+    <ul>
+      <li>{{ "Variavel: " + variavel }}</li>
+      <li>{{ "Expressão: " + expressao }}</li>
+      <li>{{ "Valor: " + valor }}</li>
+      <li>{{ "Clique para mais detalhes" }}</li>
+    </ul>
+  </ng-template>
+  <!-- Fim tooltip atribuicao -->
+  <ng-container *ngIf="{ is: true }; let collapse">
+    <!-- Icon atribuicao -->
+    <div class="align-center">
+      <span
+        (click)="collapse.is = !collapse.is"
+        [attr.aria-expanded]="!collapse.is"
+        aria-controls="collapseBasic"
+        class="material-icons text-info pointer text-48"
+        [tooltip]="tooltipAtribuicao"
+      >
+        login
+      </span>
+    </div>
+    <!-- Fim icon atribuicao -->
+    <!-- Detalhes atribuicao -->
+    <div class="atribuicao" [collapse]="collapse.is" [isAnimated]="true">
+      <h4 class="align-center mt-1">
+        {{ "Atribuindo a ( " + variavel + " ) o valor "
+        }}<span class="ml-2" [tooltip]="'Expressão: ' + expressao">{{
+          valor
+        }}</span>
+      </h4>
+    </div>
+  </ng-container>
+  <!-- Fim detalhes atribuicao -->
+</ng-template>
+<!-- Fim atribuicao -->
+
+<!-- Iteração -->
+<ng-template #iteracao let-array="array" let-iteracoes="iteracoes">
+  <!-- TooltipIteracao -->
+  <ng-template #tooltipIteracao>
+    <h6 class="align-center">{{ "Iteração" }}</h6>
+    <ul>
+      <li>{{ "Array iterado: " + array }}</li>
+      <li>{{ "Iterações realizadas: " + iteracoes.length }}</li>
+    </ul>
+  </ng-template>
+  <!-- Fim tooltipIteracao -->
+  <ng-container *ngIf="{ is: true }; let collapse">
+    <!-- Iteração icon -->
+    <div class="align-center">
+      <span
+        (click)="collapse.is = !collapse.is"
+        [attr.aria-expanded]="!collapse.is"
+        aria-controls="collapseBasic"
+        class="material-icons text-dark pointer text-48"
+        [tooltip]="tooltipIteracao"
+      >
+        loop
+      </span>
+    </div>
+    <!-- Fim iteração icon -->
+    <!-- Detais iteração -->
+    <div class="iteração" [collapse]="collapse.is" [isAnimated]="true">
+      <h4 class="align-center">
+        {{ "Iterando no array: " + array }}
+      </h4>
+      <ul>
+        <li *ngFor="let itera of iteracoes; index as i">
+          <div class="iteracao my-2">
+            <h5 class="align-center m-1">
+              {{ "Posição: " + itera.indice }}
+            </h5>
+            <!-- Items iteração -->
+            <ng-container
+              *ngTemplateOutlet="variaveisTemplate; context: itera"
+            ></ng-container>
+            <ul class="">
+              <h4 class="align-center">{{ '{' }}</h4>
+              <li *ngFor="let itemsInteracao of itera.items; index as j">
+                <ng-container
+                  *ngIf="{ $implicit: itemsInteracao }; let myContext"
+                >
+                  <ng-container
+                    *ngTemplateOutlet="switchCase; context: myContext"
+                  ></ng-container>
+                </ng-container>
+                <ng-container *ngIf="itera.items[j + 1]">
+                  <ng-container *ngTemplateOutlet="seta"></ng-container>
+                </ng-container>
+              </li>
+              <h4 class="align-center">{{ '}' }}</h4>
+            </ul>
+            <!-- Fim items iteração -->
+          </div>
+          <ng-container *ngIf="iteracoes[i + 1]">
+            <ng-container *ngTemplateOutlet="repeat"></ng-container>
+          </ng-container>
+        </li>
+      </ul>
+    </div>
+    <!-- Fim detais iteração -->
+  </ng-container>
+</ng-template>
+<!-- Fim iteração -->
+<!-- Enquanto -->
+<ng-template
+  #enquanto
+  let-expressao="expressao"
+  let-items="items"
+  let-variaveis="variaveis"
+>
+  <ng-container *ngIf="expressao && items && variaveis">
+    <!-- tooltipEnquanto -->
+    <ng-template #tooltipEnquanto>
+      <h6 class="align-center">{{ "Enquanto" }}</h6>
+      <ul>
+        <li>{{ "Expressão: " + expressao }}</li>
+        <li>{{ "Itens realizados: " + items.length }}</li>
+      </ul>
+    </ng-template>
+    <!-- Fim tooltipEnquanto -->
+    <ng-container *ngIf="{ is: true }; let collapse">
+      <ng-container *ngIf="{ variaveis: variaveis }; let myContext">
+        <ng-container
+          *ngTemplateOutlet="variaveisTemplate; context: myContext"
+        ></ng-container>
+      </ng-container>
+      <!-- enquanto icon -->
+      <div class="align-center">
+        <span
+          (click)="collapse.is = !collapse.is"
+          [attr.aria-expanded]="!collapse.is"
+          aria-controls="collapseBasic"
+          class="material-icons text-dark pointer text-48"
+          [tooltip]="tooltipEnquanto"
+        >
+          all_inclusive
+        </span>
+      </div>
+      <!-- Fim enquanto icon -->
+
+      <!-- Details enquanto -->
+      <div class="enquanto" [collapse]="collapse.is" [isAnimated]="true">
+        <h4 class="align-center my-2">{{ "Enquanto: " + expressao }}</h4>
+        <h4 class="align-center">{{ '{' }}</h4>
+        <li class="" *ngFor="let itemsEquanto of items; index as j">
+          <div>
+            <ng-container
+              *ngFor="let itemsSingleEquanto of itemsEquanto; index as i"
+            >
+              <ng-container
+                *ngIf="{ $implicit: itemsSingleEquanto }; let myContext"
+              >
+                <ng-container
+                  *ngTemplateOutlet="switchCase; context: myContext"
+                ></ng-container>
+              </ng-container>
+              <ng-container *ngIf="items[i + 1]">
+                <ng-container *ngTemplateOutlet="seta"></ng-container>
+              </ng-container>
+            </ng-container>
+          </div>
+          <ng-container *ngIf="items[j + 1]">
+            <ng-container *ngTemplateOutlet="repeat"></ng-container>
+          </ng-container>
+        </li>
+        <h4 class="align-center mt-1">{{ '}' }}</h4>
+      </div>
+      <!-- Fim details enquanto -->
+    </ng-container>
+  </ng-container>
+</ng-template>
+<!-- Fim enquanto -->
+
+<!-- Retorno -->
+<ng-template #retorno let-retorno="retorno">
+  <!-- Retorno icon -->
+  <div class="align-center">
+    <span
+      class="material-icons text-48 text-danger pointer"
+      [tooltip]="'Retorno: ' + retorno"
+    >
+      subdirectory_arrow_right
+    </span>
+  </div>
+  <!-- Fim retorno icon  -->
+</ng-template>
+<!-- Fim retorno -->
+<ng-template #break>
+  <div class="text-center alert alert-warning">BREAK</div>
+</ng-template>
+<!-- Executar Regra -->
+<ng-template
+  #executarRegra
+  let-regra="regra"
+  let-entradaRegra="entradaRegra"
+  let-saidaRegra="saidaDoExecutado"
+  let-TrilhaDaRegraExcutada="TrilhaDaRegraExcutada"
+>
+  <!-- tooltipEnquanto -->
+  <ng-template #tooltipExecutarRegra>
+    <h6 class="align-center">{{ "Executar Regra" }}</h6>
+    <ul>
+      <li *ngIf="regra">{{ "Regra: " + regra }}</li>
+      <li *ngIf="entradaRegra">{{ "Entrada da Regra: " + entradaRegra }}</li>
+      <li *ngIf="saidaRegra">{{ "Saida da Regra: " + saidaRegra }}</li>
+    </ul>
+  </ng-template>
+  <!-- Fim tooltipEnquanto -->
+  <ng-container *ngIf="{ is: true }; let collapse">
+    <!-- Executar regra icon -->
+    <div class="align-center">
+      <span
+        (click)="collapse.is = !collapse.is"
+        [attr.aria-expanded]="!collapse.is"
+        aria-controls="collapseBasic"
+        [tooltip]="tooltipExecutarRegra"
+        class="color-darkcyan"
+      >
+        <span class="material-icons pointer text-48"> tv </span>
+        <span class="material-icons pointer icon-executarRegra align-top">
+          rule
+        </span>
+      </span>
+    </div>
+    <!-- Fim executar regra icon -->
+    <!-- Details executar regra -->
+    <div class="executarRegra" [collapse]="collapse.is" [isAnimated]="true">
+      <h4 class="align-center" *ngIf="regra">{{ regra }}</h4>
+      <h4 class="align-center" *ngIf="entradaRegra">
+        {{ "Entrada: " + entradaRegra }}
+      </h4>
+      <h4 class="align-center" *ngIf="saidaRegra">
+        {{ "Retorno: " + saidaRegra }}
+      </h4>
+      <h5 class="align-center pointer link"
+      [tooltip]="'Clique para ver detalhes'"
+       (click)="trilhaExecutada(TrilhaDaRegraExcutada)" *ngIf="TrilhaDaRegraExcutada">
+        {{
+          "Detalhes na trilha ID: " +
+            TrilhaDaRegraExcutada +
+            " da regra executada"
+        }}
+      </h5>
+    </div>
+    <!-- Fim Details executar regra -->
+  </ng-container>
+</ng-template>
+<!-- Fim executar regra -->
+<!-- IF -->
+<ng-template
+  #IfTemple
+  let-naoAtendeuCodicoes="naoAtendeuCodicoes"
+  let-condicao="condicao"
+  let-expressao="expressao"
+  let-items="items"
+  let-nome="nome"
+  let-variaveis="variaveis"
+  let-condicoes="condicoes"
+>
+  <!-- TooltipIf -->
+  <ng-template #tooltipIf>
+    <h6 class="align-center">{{ "IF" }}</h6>
+    <ul>
+      <li *ngIf="condicao">{{ "Condição aceita: " + condicao }}</li>
+      <li *ngIf="expressao">{{ "Expressão: " + expressao }}</li>
+    </ul>
+    <div *ngIf="naoAtendeuCodicoes">
+      <h6 class="align-center">
+        {{ "Nenhuma condição do " + nome + " atendida" }}
+      </h6>
+    </div>
+  </ng-template>
+  <!-- Fim tooltipIf -->
+
+  <ng-container *ngIf="{ variaveis: variaveis }; let myContext">
+    <ng-container
+      *ngTemplateOutlet="variaveisTemplate; context: myContext"
+    ></ng-container>
+  </ng-container>
+  <ng-container *ngIf="{ is: true }; let collapse">
+    <!-- If icon -->
+    <div
+      class="align-center"
+      *ngIf="{ notAtendeu: naoAtendeuCodicoes }; let classeCss"
+    >
+      <span
+        (click)="collapse.is = !collapse.is"
+        [attr.aria-expanded]="!collapse.is"
+        aria-controls="collapseBasic"
+        class="material-icons pointer text-48 {{
+          classeCss && classeCss.notAtendeu ? 'text-danger' : 'text-primary'
+        }}"
+        [tooltip]="tooltipIf"
+      >
+        help_outline
+      </span>
+    </div>
+    <!-- Fim IF icon -->
+    <!-- NaoAtendeuCodicoes -->
+    <div
+      class="ifTemplate"
+      [collapse]="collapse.is"
+      [isAnimated]="true"
+      *ngIf="naoAtendeuCodicoes; else seTemplate"
+    >
+      <!-- Condicoes -->
+      <div class="condicoes my-2">
+        <h6 class="align-center">{{ "Expressoes do " + nome +' :'}}</h6>
+        <ul *ngIf="condicoes">
+          <h5 class="align-center" *ngFor="let item of condicoes">
+            {{ item }}
+          </h5>
+        </ul>
+      </div>
+      <!-- Fim Condicoes  -->
+      <h5 class="align-center">
+        {{ "Nenhuma condição do " + nome + " atendida" }}
+      </h5>
+    </div>
+    <!-- Fim naoAtendeuCodicoes  -->
+
+    <!-- Condição -->
+    <ng-template #seTemplate>
+      <div
+        class="ifTemplate"
+        [collapse]="collapse.is"
+        [isAnimated]="true"
+        class="ifTemplate"
+      >
+        <!-- Condicoes -->
+        <div class="condicoes">
+          <h6 class="align-center">{{ "Expressoes do " + nome }}</h6>
+          <ul *ngIf="condicoes">
+            <h5 class="align-center" *ngFor="let item of condicoes">
+              {{ item }}
+            </h5>
+          </ul>
+        </div>
+        <!-- Fim Condicoes  -->
+        <h4 class="align-center">
+          {{
+            "Condição: " +
+              condicao +
+              (expressao ? " (" + expressao + ") " : " ") +
+              "aceita"
+          }}
+        </h4>
+        <h4 class="align-center">{{ '{' }}</h4>
+        <!-- Itens if -->
+        <ng-container *ngFor="let item of items; index as i">
+          <ng-container *ngIf="{ $implicit: item }; let myContext">
+            <ng-container
+              *ngTemplateOutlet="switchCase; context: myContext"
+            ></ng-container>
+          </ng-container>
+          <ng-container *ngIf="items[i + 1]">
+            <ng-container *ngTemplateOutlet="seta"></ng-container>
+          </ng-container>
+        </ng-container>
+        <!-- Fim itens if -->
+        <h4 class="align-center mt-1">{{ '}' }}</h4>
+      </div>
+    </ng-template>
+    <!-- Fim condição -->
+  </ng-container>
+</ng-template>
+<!-- Fim IF -->
+
+<!-- Manipular array -->
+<ng-template
+  #manipularArray
+  let-metodo="metodo"
+  let-array="array"
+  let-valor="valor"
+>
+  <ng-container *ngIf="{ is: true }; let collapse">
+    <!-- TooltipManipularArray -->
+    <ng-template #tooltipManipularArray>
+      <h6 class="align-center">{{ "Manipular Array" }}</h6>
+      <ul>
+        <li>{{ "Array manipulado: " + array }}</li>
+        <li>{{ "Operação: " + metodo }}</li>
+        <li>{{ "Valor: " + valor }}</li>
+      </ul>
+    </ng-template>
+    <!-- Fim tooltipManipularArray -->
+    <!-- Icon manipular array -->
+    <div class="align-center">
+      <span
+        (click)="collapse.is = !collapse.is"
+        [attr.aria-expanded]="!collapse.is"
+        aria-controls="collapseBasic"
+        [tooltip]="tooltipManipularArray"
+        class="color-darkgoldenrod"
+      >
+        <span class="material-icons pointer text-48"> receipt_long </span>
+        <span class="material-icons pointer icon-manipularArray align-top">
+          create
+        </span>
+      </span>
+    </div>
+    <!-- Fim icon manipular array -->
+    <!-- Detais Manipular array -->
+    <div class="manipularArray" [collapse]="collapse.is" [isAnimated]="true">
+      <h4 class="align-center">{{ metodo + " " + valor + " ao " + array }}</h4>
+    </div>
+  </ng-container>
+  <!-- Fim detais manipular array -->
+</ng-template>
+<!-- Fim manipular array -->
+
+<!-- Variaveis -->
+<ng-template #variaveisTemplate let-variaveis="variaveis">
+  <!-- Variaveis -->
+  <ng-container *ngIf="{ is: true }; let collapse">
+    <div class="my-3">
+      <h6
+        class="align-center pointer"
+        (click)="collapse.is = !collapse.is"
+        [attr.aria-expanded]="!collapse.is"
+        aria-controls="collapseBasic"
+        [tooltip]="'Clique para ver todas'"
+      >
+        Variaveis
+        <span class="material-icons text-dark align-middle ml-2"> code </span>
+      </h6>
+      <!-- Varaiveis detail -->
+      <div
+        [collapse]="collapse.is"
+        [isAnimated]="true"
+        class="variaveis"
+        *ngIf="variaveis.length > 0"
+      >
+        <!-- <h5 class="align-center m-1">{{ "Variaveis:" }}</h5> -->
+        <ul>
+          <li class="align-center mt-1" *ngFor="let item of variaveis">
+            <h5>{{ item.nome + " = " + item.valor }}</h5>
+          </li>
+        </ul>
+      </div>
+      <!-- Fim varaiveis detail  -->
+    </div>
+  </ng-container>
+</ng-template>
+<!-- Fim variaveis -->
+<!-- Seta -->
+<ng-template #seta>
+  <div class="align-center">
+    <span class="material-icons text-24"> south </span>
+  </div>
+</ng-template>
+<!-- Fim seta -->
+
+<!-- Repeat -->
+<ng-template #repeat>
+  <div class="align-center my-3">
+    <span class="material-icons text-36 angulo"> repeat </span>
+  </div>
+</ng-template>
+<!-- Fim repeat -->
+
+<!-- error -->
+<ng-template #error let-msg="menssagem">
+  <h4 class="align-center my-3">{{ msg }}</h4>
+</ng-template>
+<!-- Fim error -->
+

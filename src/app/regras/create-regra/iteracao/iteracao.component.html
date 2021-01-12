@@ -14,12 +14,17 @@
     </span>
   </div>
   <app-verificacao-var
-  *ngIf="objetoLocal && objetoLocal['variaveis'] && objetoLocal['acao'] && objetoLocal['acao']['array']"
-  [(variaveisArray)]="objetoLocal['variaveis']"
-  [(variavel)]="this.objetoLocal['acao'].array"
-  [(errorControl)]="errorControl"
-  [(tootltipErro)]="tootltipErro"
-  [only]="'array'"
+    *ngIf="
+      objetoLocal &&
+      objetoLocal['variaveis'] &&
+      objetoLocal['acao'] &&
+      objetoLocal['acao']['array']
+    "
+    [(variaveisArray)]="objetoLocal['variaveis']"
+    [(variavel)]="this.objetoLocal['acao'].array"
+    [(errorControl)]="errorControl"
+    [(tootltipErro)]="tootltipErro"
+    [only]="'array'"
   ></app-verificacao-var>
   <div class="row">
     <div class="col-10 d-flex">

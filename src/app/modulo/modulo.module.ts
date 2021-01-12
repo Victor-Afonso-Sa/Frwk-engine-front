@@ -6,7 +6,6 @@ import { ModuloComponent } from './modulo/modulo.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 
-
 @NgModule({
   declarations: [ModuloComponent],
   imports: [
@@ -16,6 +15,6 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     FormsModule,
     TooltipModule.forRoot(),
   ],
-  exports: [ModuloComponent]
+  exports: [ModuloComponent],
 })
-export class ModuloModule { }
+export class ModuloModule {}

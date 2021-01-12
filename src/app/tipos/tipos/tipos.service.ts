@@ -1,18 +1,13 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TiposService {
-
-constructor() { }
-verificaType(formulario, obj){
-  let verificador = true;
-    if (
-      formulario.valid &&
-      obj[`type`]
-
-    ) {
+  constructor() {}
+  verificaType(formulario, obj) {
+    let verificador = true;
+    if (formulario.valid && obj[`type`]) {
       switch (obj[`type`]) {
         case `array`:
           if (obj[`tipoitems`]) {
@@ -41,5 +36,5 @@ verificaType(formulario, obj){
       }
     }
     return verificador;
-}
+  }
 }

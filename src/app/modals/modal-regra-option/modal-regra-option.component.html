@@ -2,17 +2,63 @@
   <div class="modal-body">
     <div class="align-center flex-column">
       <h3>Novo:</h3>
-      <button  class="btn btn-outline-success btn-escolha mt-3 px-4" [disabled]="clicou" (click)="escolhido('escopo');clicou = true">Escopo</button>
-      <button class="btn btn-outline-dark btn-escolha mt-3 px-4" [disabled]="clicou" (click)="escolhido('iteracao');clicou = true">Iteração</button>
-      <button class="btn btn-outline-info btn-escolha mt-3 " [disabled]="clicou" (click)="escolhido('atribuicao');clicou = true">Atribuição</button>
-      <button class="btn btn-outline-primary btn-escolha mt-3 " [disabled]="clicou" (click)="escolhido('if');clicou = true">If</button>
-      <button class="btn btn-outline-danger btn-escolha mt-3 " [disabled]="clicou" (click)="escolhido('retorno');clicou = true">Retornar</button>
-      <button class="btn btn-outline-warning btn-escolha mt-3 " [disabled]="clicou" (click)="escolhido('break');clicou = true">Break</button>
-      <button class="btn btn-outline-dark btn-escolha mt-3 " [disabled]="clicou" (click)="escolhido('enquanto');clicou = true">Enquanto</button>
-      <button class="btn btn-outline-success btn-escolha mt-3 " [disabled]="clicou" (click)="escolhido('executarRegra');clicou = true">Executar regra</button>
-      <button class="btn btn-outline-dark btn-escolha mt-3 " [disabled]="clicou" (click)="escolhido('manipularArray');clicou = true">Manipular lista</button>
-        </div>
-      </div>
-    <br />
+      <button
+        class="btn btn-outline-dark btn-escolha mt-3 px-4"
+        [disabled]="clicou"
+        (click)="escolhido('iteracao'); clicou = true"
+      >
+        Iteração
+      </button>
+      <button
+        class="btn btn-outline-info btn-escolha mt-3"
+        [disabled]="clicou"
+        (click)="escolhido('atribuicao'); clicou = true"
+      >
+        Atribuição
+      </button>
+      <button
+        class="btn btn-outline-primary btn-escolha mt-3"
+        [disabled]="clicou"
+        (click)="escolhido('if'); clicou = true"
+      >
+        If
+      </button>
+      <button
+        class="btn btn-outline-danger btn-escolha mt-3"
+        [disabled]="clicou"
+        (click)="escolhido('retorno'); clicou = true"
+      >
+        Retornar
+      </button>
+      <button
+        class="btn btn-outline-warning btn-escolha mt-3"
+        [disabled]="clicou"
+        (click)="escolhido('break'); clicou = true"
+      >
+        Break
+      </button>
+      <button
+        class="btn btn-outline-dark btn-escolha mt-3"
+        [disabled]="clicou"
+        (click)="escolhido('enquanto'); clicou = true"
+      >
+        Enquanto
+      </button>
+      <button
+        class="btn btn-outline-success btn-escolha mt-3"
+        [disabled]="clicou"
+        (click)="escolhido('executarRegra'); clicou = true"
+      >
+        Executar regra
+      </button>
+      <button
+        class="btn btn-outline-dark btn-escolha mt-3"
+        [disabled]="clicou"
+        (click)="escolhido('manipularArray'); clicou = true"
+      >
+        Manipular lista
+      </button>
+    </div>
   </div>
-
+  <br />
+</div>

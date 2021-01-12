@@ -1,15 +1,7 @@
-import {
-  AfterViewInit,
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
-import { distinctUntilChanged, first, last, take } from 'rxjs/operators';
+import { Component, Input, OnInit } from '@angular/core';
+import { first, take } from 'rxjs/operators';
 import { ConfirmService } from 'src/app/modals/modal-confirm/confirm.service';
 import { NewVarService } from 'src/app/modals/modal-new-var/new-var.service';
-
 import { OptionService } from 'src/app/modals/modal-regra-option/option.service';
 import { ExpressaoService } from 'src/app/modals/modalExpressao/expressao.service';
 import { ModalsServicesService } from 'src/app/modals/modals-services.service';
@@ -117,7 +109,7 @@ export class EscopoClassComponent implements OnInit {
     }
     return retorno;
   }
-  openVariaveis(only?: string, variaveis?:Array<any>) {
+  openVariaveis(only?: string, variaveis?: Array<any>) {
     const varArray = variaveis ? variaveis : this.objetoLocal[`variaveis`];
     if (only) {
       this.modals.modalVariaveis(varArray, only);
@@ -145,8 +137,8 @@ export class EscopoClassComponent implements OnInit {
         ? this.objeto.schemaregras[`itens`]
         : this.objeto[`itens`];
     const index = array.indexOf(this.objetoLocal);
-    const sub = index - 1 ;
-    if (index >= 0 && sub >=0) {
+    const sub = index - 1;
+    if (index >= 0 && sub >= 0) {
       try {
         document
           .getElementById(`escopo${array[sub][`id`]}`)
@@ -154,7 +146,6 @@ export class EscopoClassComponent implements OnInit {
         array.splice(sub, 0, array.splice(index, 1)[0]);
       } catch (e) {
         console.log(e);
-
       }
     }
   }
@@ -164,7 +155,7 @@ export class EscopoClassComponent implements OnInit {
         ? this.objeto.schemaregras[`itens`]
         : this.objeto[`itens`];
     const index = array.indexOf(this.objetoLocal);
-    const sub = index + 1 ;
+    const sub = index + 1;
     if (index >= 0 && sub < array.length) {
       try {
         document
@@ -189,6 +180,7 @@ export class EscopoClassComponent implements OnInit {
         variavel ? variavel : IntERNALvar,
         valor
       );
+
       eval(expressao);
       this.errorControl = false;
       this.tootltipErro = null;

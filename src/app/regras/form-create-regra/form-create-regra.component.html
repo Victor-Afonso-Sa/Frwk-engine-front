@@ -28,15 +28,15 @@
               Essa identificação ja existe dentro desta pasta.
             </div>
             <div
-          #validation
-          class="alert alert-danger"
-          *ngIf="
-            formulario?.controls?.nome?.errors?.pattern &&
-            !formulario?.controls?.nome?.pristine
-          "
-        >
-          Nome deve iniciar com letras, conter apenas letras e/ou números.
-        </div>
+              #validation
+              class="alert alert-danger"
+              *ngIf="
+                formulario?.controls?.nome?.errors?.pattern &&
+                !formulario?.controls?.nome?.pristine
+              "
+            >
+              Nome deve iniciar com letras, conter apenas letras e/ou números.
+            </div>
           </div>
           <div class="col-md-6" *ngIf="regra">
             <label class="control-label" for="id">Id:</label>
@@ -98,6 +98,14 @@
           </div>
         </ng-container>
         <div class="d-flex justify-content-center mt-2 col-sm-12">
+          <button
+            class="btn btn-outline-info px-4 mx-4"
+            *ngIf="edicao"
+            (click)="openTrilhas()"
+            type="button"
+          >
+            Trilhas
+          </button>
           <button
             class="btn btn-outline-danger px-4 mx-4"
             *ngIf="edicao"

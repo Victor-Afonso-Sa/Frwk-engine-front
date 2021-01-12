@@ -1,0 +1,50 @@
+<h4 class="align-center mt-3">{{ "Trilhas" }}</h4>
+<h6 class="align-center">{{ idregra }}</h6>
+<div class="row p-5" *ngIf="trilhas && trilhas.length > 0; else noContent">
+  <ul class="col-3 nav nav-pills flex-column sticky">
+    <ng-container *ngFor="let trilha of trilhas">
+      <li
+        class="list-group-item d-flex justify-content-between align-items-center li-trilha"
+        *ngIf="trilha.idtrilha"
+        [id]="trilha.idtrilha"
+        (click)="setClass(trilha.idtrilha); setTrilha(trilha)"
+      >
+        <span
+          (click)="excluirTrilha(trilha.idtrilha)"
+          [tooltip]="'Deletar trilha ' + trilha.idtrilha"
+          class="color-red material-icons align-middle pointer"
+        >
+          clear
+        </span>
+        <h6 class="no-select">{{ "Id: " + trilha.idtrilha }}</h6>
+        <h6
+          *ngIf="trilha.jsonexecucao.data"
+          [tooltip]="trilha.jsonexecucao.data"
+          placement="top"
+          container="body"
+          class="p-1 pointer no-select"
+        >
+          {{ "DATA" }}
+        </h6>
+      </li>
+    </ng-container>
+  </ul>
+  <div class="col-9 borda">
+    <app-trilha
+      *ngIf="jsonExecucao"
+      [(display)]="display"
+      [(jsonExecucao)]="jsonExecucao"
+    >
+    </app-trilha>
+  </div>
+</div>
+<ng-template #loading>
+  <div class="d-flex justify-content-center col-12 mt-5">
+    <span class="loader mt-3"></span>
+  </div>
+</ng-template>
+<ng-template #noContent>
+  <div class="alert alert-warning text-center">
+    <span class="font-weight-bold mt-3">Nenhuma trilha registrada</span>
+  </div>
+</ng-template>
