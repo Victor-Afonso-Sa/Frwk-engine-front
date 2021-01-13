@@ -42,6 +42,9 @@ export class TrilhaService {
     const obj = { params: { idtrilha: id } };
     return this.http.delete(this.URI, obj).pipe(take(1));
   }
+  excluirTrilhaByIdRegra(idregra) {
+    return this.http.delete(this.URI +`/${idregra}`).pipe(take(1));
+  }
   showEscopo(tipo, where, jsonexecutor) {
     let factory;
     let t = this.setComponente(tipo);

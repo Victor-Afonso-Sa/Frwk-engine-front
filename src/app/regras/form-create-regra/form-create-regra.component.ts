@@ -1,23 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   debounceTime,
   distinctUntilChanged,
   filter,
+  first,
   map,
-  switchMap
+  switchMap,
+  take,
 } from 'rxjs/operators';
+import { ConfirmService } from 'src/app/modals/modal-confirm/confirm.service';
 import { ModalsServicesService } from 'src/app/modals/modals-services.service';
+import { TrilhaService } from 'src/app/modals/modalTrilha/trilha.service';
 import { ParametrosService } from 'src/app/parametros/parametros.service';
 import { SharedService } from 'src/app/shared.service';
 import { TiposService } from 'src/app/tipos/tipos/tipos.service';
 import { RegrasService } from '../regras.service';
-
 
 @Component({
   selector: 'app-form-create-regra',
@@ -42,15 +41,16 @@ export class FormCreateRegraComponent implements OnInit {
     },
     errors: [],
   };
-  parametros =[];
+  parametros = [];
   constructor(
     private router: Router,
     private activated: ActivatedRoute,
     private service: RegrasService,
     private shared: SharedService,
-    private typeService: TiposService,
+    private confirmService: ConfirmService,
     private modal: ModalsServicesService,
-    private paramsService: ParametrosService,
+    private typeService: TiposService,
+    private trilhasService: TrilhaService,
   ) {}
 
   ngOnInit() {
@@ -181,8 +181,21 @@ export class FormCreateRegraComponent implements OnInit {
     this.service.editarRegra(this.regra);
   }
   excluir() {
-    this.shared
-      .getOnePastaRegras(this.regra.schemaregras.pasta)
+    this.modal.createConfirm(
+      `Se excluir todas trilhas também serão excluidas`,
+      `Deseja excluir`,
+      `excluir`,
+      `cancelar`
+    );
+    this.confirmService.responseConfirm
+      .pipe(
+        first(),
+        distinctUntilChanged(),
+        filter((v) => v && v != false),
+        switchMap((v) =>
+          this.shared.getOnePastaRegras(this.regra.schemaregras.pasta)
+        )
+      )
       .pipe(
         map((v) => {
           if (v) {
@@ -200,12 +213,18 @@ export class FormCreateRegraComponent implements OnInit {
         }),
         switchMap((pasta) => this.shared.putPastaRegras(pasta))
       )
-      .subscribe();
-    this.service.excluirRegra(this.idObj).subscribe();
-    this.router.navigate(
-      [{ outlets: { primary: [`regras`], dash: null } }],
-      {}
-    );
+      .pipe(take(1),switchMap((value) => this.trilhasService.excluirTrilhaByIdRegra(this.idObj)))
+      .subscribe(
+        () => {},
+        () => {},
+        () => {
+          this.service.excluirRegra(this.idObj).subscribe();
+          this.router.navigate(
+            [{ outlets: { primary: [`regras`], dash: null } }],
+            {}
+          );
+        }
+      );
   }
   async setType(tipo, onde) {
     if (onde == 'saida') {
@@ -314,7 +333,7 @@ export class FormCreateRegraComponent implements OnInit {
   verificarModelos(obj) {
     this.service.verificarModelos(obj, this.varControler);
   }
-  openTrilhas(){
+  openTrilhas() {
     this.modal.createTrilha(this.idObj);
   }
   getModelo(tipo) {

@@ -92,7 +92,7 @@ export class RegrasSidebarComponent implements OnInit {
   }
   deletePasta(pasta) {
     this.modalService.createConfirm(
-      `Se excluir todas regras também sera excluidas`,
+      `Se excluir todas regras e trilhas também serão excluidas`,
       `Deseja excluir`,
       `excluir`,
       `cancelar`
