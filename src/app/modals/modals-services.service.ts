@@ -228,8 +228,10 @@ export class ModalsServicesService {
       };
       if (item.type == `array`) {
         prop[`tipoitems`] = item.tipoitems;
-        prop[`tipomodelo`] = item.tipomodelo;
-        prop[`modelo`] = item.modelo;
+        if(item.tipoitems == `modelo`){
+          prop[`tipomodelo`] = item.tipomodelo;
+          prop[`modelo`] = item.modelo;
+        }
       }
       if (item.type == `modelo`) {
         prop[`type`] = item.tipomodelo;

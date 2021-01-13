@@ -22,8 +22,9 @@
     "
     [(variavel)]="variavel"
     [(expressao)]="objetoLocal['acao'].expressao"
-    [(errorControl)]="errorControl"
-    [(tootltipErro)]="tootltipErro"
+    [(errorControlExpressao)]="errorControl"
+    [(tootltipErroExpressao)]="tootltipErro"
+    [executar]="'expressao'"
     (expressaoEmitter)="evaluate(null, $event[1], variavel)"
   ></app-verificacao-var>
   <div class="row">

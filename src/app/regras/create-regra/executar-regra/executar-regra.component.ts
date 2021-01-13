@@ -42,6 +42,7 @@ export class ExecutarRegraComponent extends EscopoClassComponent {
       .subscribe((vari) => {
         this.variavel = vari;
         this.objetoLocal['acao'].retorno = vari.id;
+        this.objetoLocal['acao'].varSaida = vari;
       });
   }
 }

@@ -145,7 +145,6 @@ export class EscopoClassComponent implements OnInit {
           .before(document.getElementById(`escopo${this.id}`));
         array.splice(sub, 0, array.splice(index, 1)[0]);
       } catch (e) {
-        console.log(e);
       }
     }
   }
@@ -163,7 +162,6 @@ export class EscopoClassComponent implements OnInit {
           .after(document.getElementById(`escopo${this.id}`));
         array.splice(sub, 0, array.splice(index, 1)[0]);
       } catch (e) {
-        console.log(e);
       }
     }
   }
@@ -180,7 +178,6 @@ export class EscopoClassComponent implements OnInit {
         variavel ? variavel : IntERNALvar,
         valor
       );
-
       eval(expressao);
       this.errorControl = false;
       this.tootltipErro = null;

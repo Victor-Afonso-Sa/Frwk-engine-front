@@ -123,8 +123,7 @@ export class ModalNewVarComponent implements OnInit {
   }
   async select(tipo) {
     this.resetModelo();
-    const path = tipo.split('.');
-    const model = await this.shared.getModelos(path[0], path[1]);
+    const model = this.getModelo(tipo);
     this.objeto[`tipomodelo`] = tipo;
     this.objeto[`modelo`] = model;
     this.shared.jsonGenerate(model).then((value) => {
@@ -149,6 +148,18 @@ export class ModalNewVarComponent implements OnInit {
           this.objeto[`valor`] = JSON.stringify(value);
         }
       });
+    }
+  }
+  getModelo(tipo) {
+    const path = tipo.split(`.`);
+    for (let index = 0; index < this.pastas.length; index++) {
+      const models = this.pastas[index].schemapastas.models;
+      const indice = models.findIndex(
+        (model) => model.idpasta == path[0] && model.idModel == path[1]
+      );
+      if (indice >= 0) {
+        return JSON.parse(models[indice].jsonModel);
+      }
     }
   }
 }

@@ -291,11 +291,6 @@ export class FormCreateRegraComponent implements OnInit {
       1
     );
   }
-  async getModelo(tipomodelo) {
-    let path = tipomodelo;
-    path = path.split(`.`);
-    return await this.shared.getModelos(path[0], path[1]);
-  }
   resetModelo(obj) {
     delete obj[`valor`];
     if (obj.type != 'modelo') {
@@ -321,5 +316,17 @@ export class FormCreateRegraComponent implements OnInit {
   }
   openTrilhas(){
     this.modal.createTrilha(this.idObj);
+  }
+  getModelo(tipo) {
+    const path = tipo.split(`.`);
+    for (let index = 0; index < this.pastasModelos.length; index++) {
+      const models = this.pastasModelos[index].schemapastas.models;
+      const indice = models.findIndex(
+        (model) => model.idpasta == path[0] && model.idModel == path[1]
+      );
+      if (indice >= 0) {
+        return JSON.parse(models[indice].jsonModel);
+      }
+    }
   }
 }

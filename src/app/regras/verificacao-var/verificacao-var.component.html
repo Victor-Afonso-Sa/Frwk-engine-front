@@ -1,11 +1,22 @@
 <span
-  [tooltip]="tootltipErro"
+*ngIf="(!executar || executar != 'expressao') && displayVar"
+  [tooltip]="tootltipErroVar"
   placement="auto"
   [delay]="100"
   triggers="hover"
-  class="material-icons {{ errorControl ? 'color-red' : 'color-green' }}"
+  class="material-icons {{ errorControlVar ? 'color-red' : 'color-green' }}"
 >
-  {{ errorControl ? "clear" : "done" }}
+  {{ errorControlVar ? "clear" : "done" }}
+</span>
+<span
+  *ngIf="(!executar || executar != 'variaveis')"
+  [tooltip]="tootltipErroExpressao"
+  placement="auto"
+  [delay]="100"
+  triggers="hover"
+  class="material-icons {{ errorControlExpressao ? 'color-red' : 'color-green' }}"
+>
+  {{ errorControlExpressao ? "clear" : "done" }}
 </span>
 <input
   type="hidden"

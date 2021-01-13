@@ -7,7 +7,7 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core';
-import { filter } from 'rxjs/operators';
+import { filter, repeat } from 'rxjs/operators';
 import { NewVarService } from 'src/app/modals/modal-new-var/new-var.service';
 import { RegrasService } from '../regras.service';
 
@@ -17,8 +17,6 @@ import { RegrasService } from '../regras.service';
   styleUrls: ['./verificacao-var.component.scss'],
 })
 export class VerificacaoVarComponent implements OnInit, OnChanges {
-  @Input() errorControl = false;
-  @Input() tootltipErro = null;
   @Input() variaveisArray;
   @Input() variavel;
   @Input() expressao;
@@ -27,6 +25,13 @@ export class VerificacaoVarComponent implements OnInit, OnChanges {
   label = '';
   @Output() expressaoEmitter = new EventEmitter();
 
+  @Input() errorControlExpressao = false;
+  @Input() errorControlVar = false;
+
+  @Input() tootltipErroExpressao = null;
+  @Input() tootltipErroVar = null;
+
+  displayVar = true;
   constructor(
     private regrasService: RegrasService,
     private varService: NewVarService
@@ -36,7 +41,9 @@ export class VerificacaoVarComponent implements OnInit, OnChanges {
     this.varService.verificacao
       .pipe(filter((v) => v != false || v != null || v != undefined))
       .subscribe((v) =>
-        this.executarVerificacoes(this.executar ? this.executar : null)
+        this.executarVerificacoes(this.executar ? this.executar : null),
+        ()=>{},
+        ()=>{ this.executarVerificacoes(this.executar ? this.executar : null) }
       );
   }
   ngOnChanges(changes: SimpleChanges): void {
@@ -50,7 +57,7 @@ export class VerificacaoVarComponent implements OnInit, OnChanges {
   }
   verificarVariaveis() {
     let veri;
-    if (this.variavel[`id`] && this.variavel[`id`].split(`.`).length <= 0) {
+    if (this.variavel[`id`] && this.variavel[`id`].split(`.`).length == 1) {
       if (this.only) {
         veri = this.regrasService.verificarVariaveis(
           this.variaveisArray,
@@ -64,13 +71,15 @@ export class VerificacaoVarComponent implements OnInit, OnChanges {
           this.variavel
         );
       }
+    }else{
+      this.displayVar = false;
     }
     if (veri) {
-      this.errorControl = true;
-      this.tootltipErro = `${this.label} ${this.variavel.id} não existe`;
+      this.errorControlVar = true;
+      this.tootltipErroVar = `${this.label} ${this.variavel.id} não existe`;
     } else {
-      this.errorControl = false;
-      this.tootltipErro = null;
+      this.errorControlVar = false;
+      this.tootltipErroVar = null;
     }
   }
   verificarExpressao() {

@@ -86,21 +86,24 @@
       </div>
     </div>
   </div>
-  <app-verificacao-var
-    *ngIf="
-      objetoLocal &&
-      objetoLocal['variaveis'] &&
-      objetoLocal['acao'] &&
-      objetoLocal['acao']['entrada'] &&
-      objetoLocal['acao']['retorno']
-    "
-    [(errorControl)]="errorControl"
-    [(tootltipErro)]="tootltipErro"
-    [(variaveisArray)]="objetoLocal['variaveis']"
-    [(variavel)]="this.objetoLocal['acao'].regra.entrada"
-    [(expressao)]="objetoLocal['acao']['entrada']"
-    (expressaoEmitter)="evaluate($event[0], $event[1])"
-  ></app-verificacao-var>
+  <div class="d-flex flex-lg-row-reverse">
+    <app-verificacao-var
+      *ngIf="
+        objetoLocal &&
+        objetoLocal['variaveis'] &&
+        objetoLocal['acao'] &&
+        objetoLocal['acao']['entrada'] &&
+        objetoLocal['acao']['retorno'] &&
+        objetoLocal['acao'].varSaida
+      "
+      [(errorControlExpressao)]="errorControl"
+      [(tootltipErroExpressao)]="tootltipErro"
+      [(variaveisArray)]="objetoLocal['variaveis']"
+      [(variavel)]="this.objetoLocal['acao'].varSaida"
+      [(expressao)]="objetoLocal['acao']['entrada']"
+      (expressaoEmitter)="evaluate($event[0], $event[1])"
+    ></app-verificacao-var>
+  </div>
   <div class="d-flex justify-content-center">
     <span
       class="material-icons seta mt-3"

@@ -35,20 +35,24 @@ export class AtribuicaoComponent
     this.openVariaveis();
     let varivel$ = this.variavelService.variavel
       .pipe(first(), distinctUntilChanged(), debounceTime(300), take(1))
-      .subscribe((vari) => {
-        if (vari) {
-          this.variavelEscolhida = vari;
-          this.objetoLocal[`acao`][`variavel`] = vari;
-          if (!this.objetoLocal[`acao`][`valor`]) {
-            this.objetoLocal[`acao`][`valor`] = null;
+      .subscribe(
+        (vari) => {
+          if (vari) {
+            this.variavelEscolhida = vari;
+            this.objetoLocal[`acao`][`variavel`] = vari;
+            if (!this.objetoLocal[`acao`][`valor`]) {
+              this.objetoLocal[`acao`][`valor`] = null;
+            }
           }
+        },
+        () => {},
+        () => {
           this.evaluate(
             this.objetoLocal[`acao`][`variavel`],
             this.objetoLocal[`acao`][`valor`]
           );
         }
-        varivel$.unsubscribe();
-      });
+      );
   }
   openModalExpressao() {
     if (this.objetoLocal[`acao`][`variavel`]) {
@@ -63,6 +67,13 @@ export class AtribuicaoComponent
           if (value) {
             this.objetoLocal[`acao`][`valor`] = value;
           }
+        },
+        () => {},
+        () => {
+          this.evaluate(
+            this.objetoLocal[`acao`][`variavel`],
+            this.objetoLocal[`acao`][`valor`]
+          );
         });
     }
   }
@@ -74,5 +85,4 @@ export class AtribuicaoComponent
     }
     return this.variavelEscolhida.nome;
   }
-
 }
