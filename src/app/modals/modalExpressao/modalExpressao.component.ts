@@ -17,16 +17,6 @@ export class ModalExpressaoComponent implements OnInit {
     private bsService: BsModalService,
     private service: ExpressaoService
   ) {}
-  comparacao = [
-    `igual : ( == )`,
-    `diferente : ( != )`,
-    `maior : ( > )`,
-    `menor : ( < )`,
-    `maior ou igual : ( >= )`,
-    `menor ou igual : ( <= )`,
-    `e: ( && )`,
-    `ou: ( || )`,
-  ];
   ngOnInit() {}
   hide() {
     this.service.expressao.emit(null);

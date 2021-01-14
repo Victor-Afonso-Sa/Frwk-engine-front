@@ -8,12 +8,11 @@ import {
   first,
   map,
   switchMap,
-  take,
+  take
 } from 'rxjs/operators';
 import { ConfirmService } from 'src/app/modals/modal-confirm/confirm.service';
 import { ModalsServicesService } from 'src/app/modals/modals-services.service';
 import { TrilhaService } from 'src/app/modals/modalTrilha/trilha.service';
-import { ParametrosService } from 'src/app/parametros/parametros.service';
 import { SharedService } from 'src/app/shared.service';
 import { TiposService } from 'src/app/tipos/tipos/tipos.service';
 import { RegrasService } from '../regras.service';
@@ -50,7 +49,7 @@ export class FormCreateRegraComponent implements OnInit {
     private confirmService: ConfirmService,
     private modal: ModalsServicesService,
     private typeService: TiposService,
-    private trilhasService: TrilhaService,
+    private trilhasService: TrilhaService
   ) {}
 
   ngOnInit() {
@@ -213,7 +212,12 @@ export class FormCreateRegraComponent implements OnInit {
         }),
         switchMap((pasta) => this.shared.putPastaRegras(pasta))
       )
-      .pipe(take(1),switchMap((value) => this.trilhasService.excluirTrilhaByIdRegra(this.idObj)))
+      .pipe(
+        take(1),
+        switchMap((value) =>
+          this.trilhasService.excluirTrilhaByIdRegra(this.idObj)
+        )
+      )
       .subscribe(
         () => {},
         () => {},
